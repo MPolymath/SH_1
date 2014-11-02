@@ -6,66 +6,38 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 20:44:48 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/01 16:03:42 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
-
-void		cd_cmd(t_main **vars)
-{
-	ft_putstr(" cd is not done\n");
-}
-
-void		setenv_cmd(t_main **vars)
-{
-	char	*new_env;
-
-/*	if ((*vars)->split_args[1] != NULL &&
-		(*vars)->split_args[2] != NULL && (*vars)->split_args[3] == NULL)
-	{
-		new_env = ft_strjoin((*vars)->split_args[1], "=");
-		new_env = ft_strjoin(new_env, (*vars)->split_args[2]);
-	}
-	else
-	{
-		ft_putstr(" setenv wrong number of arguments\n");
-		exit(0);
-	}*/
-	ft_putstr(" setenv is not done\n");
-}
-
-void		unsetenv_cmd(t_main **vars)
-{
-	ft_putstr(" unsetenv is not done\n");
-}
-
-void		env_cmd(t_main **vars)
-{
-	ft_putstr(" env is not done\n");
-}
+#include <stdio.h>
 
 void		exec_others_cmd(t_main **vars)
 {
 	int		i;
 
 	i = 0;
-	(*vars)->test_path = NULL;
 	if ((*vars)->paths != NULL)
 	{
-		while ((*vars)->paths[i] != '\0')
+		if (execve((*vars)->command, (*vars)->split_args, (*vars)->env) == -1)
 		{
-//			if ((*vars)->test_path != NULL)
-//			{
-//				free((*vars)->test_path);
-//				(*vars)->test_path = NULL;
-//			}
-			(*vars)->test_path = ft_strjoin((*vars)->paths[i], (*vars)->command);
-			execve((*vars)->test_path, (*vars)->split_args, (*vars)->env);
-			i++;
+			while ((*vars)->paths[i] != '\0')
+			{
+				if ((*vars)->test_path != NULL)
+				{
+					free((*vars)->test_path);
+					(*vars)->test_path = NULL;
+				}
+				(*vars)->test_path =
+							ft_strjoin((*vars)->paths[i], (*vars)->command);
+				execve((*vars)->test_path, (*vars)->split_args, (*vars)->env);
+				i++;
+			}
+			ft_putstr((*vars)->command);
+			ft_putstr(": command not found\n");
+			exit(0);
 		}
-		ft_putstr((*vars)->command);
-		ft_putstr(": command not found\n");
 	}
 }
 

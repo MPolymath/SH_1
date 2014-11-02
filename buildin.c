@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork.c                                             :+:      :+:    :+:   */
+/*   buildin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 21:46:54 by mdiouf           ###   ########.fr       */
+/*   Created: 2014/10/12 20:50:44 by mdiouf            #+#    #+#             */
+/*   Updated: 2014/11/01 16:42:23 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
-void	ft_fork(t_main **vars)
+void		setenv_cmd(t_main **vars)
 {
-	int	pid;
+	vars = vars;
+	ft_putstr(" setenv is not done\n");
+}
 
-	if (ft_strcmp((*vars)->command, "exit") == 0)
-		exit(0);
-	pid = fork();
-	if (pid == 0)
-		execute(*vars);
-	else if (pid > 0)
-		wait(NULL);
-	else
-		ft_putstr("Fork Error\n");
+void		unsetenv_cmd(t_main **vars)
+{
+	vars = vars;
+	ft_putstr(" unsetenv is not done\n");
+}
+
+void		env_cmd(t_main **vars)
+{
+	vars = vars;
+	ft_putstr(" env is not done\n");
 }

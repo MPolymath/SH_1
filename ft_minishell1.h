@@ -6,18 +6,21 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 18:04:12 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/02 19:55:21 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/includes/libft.h"
-#include <unistd.h>
-#include <stdio.h>
+#ifndef FT_MINISHELL1_H
+# define FT_MINISHELL1_H
+# include "libft/includes/libft.h"
+# include <unistd.h>
+# include <stdio.h>
 
 typedef struct	s_main
 {
 	int			fd;
 	int			args_nbr;
+	int			i;
 	char		**env;
 	char		*line;
 	char		*tmp;
@@ -32,9 +35,37 @@ typedef struct	s_args
 	int			size;
 	int			tmp_start;
 	int			i;
-	int 		j;
+	int			j;
 }				t_args;
 
-char			**ft_split_path(char **envp, char ***env);
+typedef struct	s_paths
+{
+	char		*cur_path;
+	char		*cur_home;
+	char		*old_path;
+}				t_paths;
+
+void			cpy_env(char **envp, t_main *vars);
+void			exec_others_cmd(t_main **vars);
 void			execute(t_main *vars);
-void			ft_fork(t_main *vars);
+void			ft_fork(t_main **vars);
+void			cd_cmd(t_main **vars);
+void			setenv_cmd(t_main **vars);
+void			unsetenv_cmd(t_main **vars);
+void			env_cmd(t_main **vars);
+int				test_space_tab(char *str, int i);
+void			ft_split_to_space(t_main **vars, int *start, int *size);
+int				count_args(t_main **vars, int start);
+void			get_size_str(t_main **vars, int i, int *size);
+void			fill_malloc_char(t_main **vars, int **start, int *i, int *j);
+void			init_var(t_args *var);
+void			args_cpy(t_main **vars, int *start);
+void			ft_split_args(t_main **vars);
+int				test_for_path(char *str);
+void			cpy_path(char **cpy_path, char **env);
+void			rmv_path(char **path);
+char			**ft_split_path(char **envp, char ***env);
+void			init_main(t_main *vars, int argc, char **argv);
+void			while_funcs(t_main *vars);
+void			main_body(t_main *vars);
+#endif

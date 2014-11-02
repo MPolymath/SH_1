@@ -6,23 +6,24 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/10 19:01:21 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 17:43:42 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/01 15:10:33 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
-int		test_for_path(char *str)
+int			test_for_path(char *str)
 {
-	if	(str[0] == 'P' && str[1] == 'A' && str[2] == 'T'
-					&& str[3] == 'H' && str[4] == '=')
+	if (str[0] == 'P' && str[1] == 'A' && str[2] == 'T' &&
+							str[3] == 'H' && str[4] == '=')
 		return (1);
 	else
 		return (0);
 }
-void	cpy_path(char **cpy_path, char **env)
+
+void		cpy_path(char **cpy_path, char **env)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (env[i] != '\0')
@@ -30,15 +31,15 @@ void	cpy_path(char **cpy_path, char **env)
 		if (test_for_path(env[i]))
 		{
 			*cpy_path = ft_strdup(env[i]);
-			break;
+			break ;
 		}
 		i++;
 	}
 }
 
-void	rmv_path(char **path)
+void		rmv_path(char **path)
 {
-	int	i;
+	int		i;
 
 	i = 5;
 	while ((*path)[i] != '\0')
@@ -49,31 +50,27 @@ void	rmv_path(char **path)
 	}
 }
 
-char	**ft_split_path(char **envp, char ***env)
+char		**ft_split_path(char **envp, char ***env)
 {
 	int		i;
-	char 	*path;
+	char	*path;
 	char	**split_path;
 
 	i = 0;
 	path = NULL;
 	while (envp[i] != '\0')
 		i++;
-	*env = (char**)malloc(sizeof(char*) * i);
+	*env = (char**)malloc(sizeof(char*) * (i + 1));
 	i = 0;
 	while (envp[i] != '\0')
 	{
 		(*env)[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	(*env)[i] = NULL;
 	i = 0;
 	cpy_path(&path, *env);
 	rmv_path(&path);
 	split_path = ft_strsplit(path, ':');
-//	if (path != NULL)
-//	{
-//		free(path);
-//		path = NULL;
-//	}
 	return (split_path);
 }

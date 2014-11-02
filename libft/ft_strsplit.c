@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/11 21:08:25 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 14:17:32 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/02 16:54:54 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	count_words(char const *s, char c, t_split *vars)
 		}
 		else if (s[vars->i] == '\0')
 		{
-			break;
+			break ;
 		}
 		else
 			(vars->i)++;
@@ -53,11 +53,11 @@ void	fill_dbl_ptr(char const *s, char c, t_split **vars)
 			((*vars)->start)++;
 		}
 		(*vars)->split_c[(*vars)->j] = (char*)malloc(sizeof(char) *
-									((*vars)->nbr_chars + 2));
+									((*vars)->nbr_chars + 1));
 	}
-		(*vars)->split_c[(*vars)->j][(*vars)->k] = s[(*vars)->i];
-		((*vars)->k)++;
-		((*vars)->i)++;
+	(*vars)->split_c[(*vars)->j][(*vars)->k] = s[(*vars)->i];
+	((*vars)->k)++;
+	((*vars)->i)++;
 }
 
 void	fill_split_c(char const *s, char c, t_split *vars)
@@ -78,7 +78,7 @@ void	fill_split_c(char const *s, char c, t_split *vars)
 			vars->split_c[vars->j][vars->k] = '/';
 			vars->split_c[vars->j][vars->k + 1] = '\0';
 			(vars->j)++;
-			break;
+			break ;
 		}
 	}
 	vars->split_c[vars->j] = NULL;

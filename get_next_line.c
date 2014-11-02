@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/27 21:55:05 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/06 17:50:37 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/01 14:26:41 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int				ft_freejoin(char **line, char *str)
 		else
 			*line = ft_strjoin(*line, str);
 		if (tmp)
+		{
 			free(tmp);
+			tmp = NULL;
+		}
 		if (*line == NULL)
 			return (-1);
 		ft_bzero(str, BUFF_SIZE);

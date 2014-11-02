@@ -6,13 +6,14 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/11 21:08:25 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 19:46:18 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/02 17:30:04 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
+#include <stdio.h>
 
-void	count_words(char const *s, char c, t_split *vars)
+void	count_words2(char const *s, char c, t_split *vars)
 {
 	while (1)
 	{
@@ -24,7 +25,7 @@ void	count_words(char const *s, char c, t_split *vars)
 		}
 		else if (s[vars->i] == '\0')
 		{
-			break;
+			break ;
 		}
 		else
 			(vars->i)++;
@@ -32,16 +33,17 @@ void	count_words(char const *s, char c, t_split *vars)
 	(vars->i) = 0;
 }
 
-void	fill_split_skip_c(char const *s, char c, t_split **vars)
+void	fill_split_skip_c2(char const *s, char c, t_split **vars)
 {
-	(*vars)->split_c[(*vars)->j][(*vars)->k] = '\0';
+	if ((*vars)->k != 0)
+		(*vars)->split_c[(*vars)->j][(*vars)->k] = '\0';
 	(*vars)->k = 0;
 	(*vars)->nbr_chars = 0;
 	while (s[(*vars)->i] == c)
 		((*vars)->i)++;
 }
 
-void	fill_dbl_ptr(char const *s, char c, t_split **vars)
+void	fill_dbl_ptr2(char const *s, char c, t_split **vars)
 {
 	(*vars)->start = (*vars)->i;
 	if ((*vars)->nbr_chars == 0)
@@ -54,35 +56,38 @@ void	fill_dbl_ptr(char const *s, char c, t_split **vars)
 		(*vars)->split_c[(*vars)->j] = (char*)malloc(sizeof(char) *
 									((*vars)->nbr_chars + 1));
 	}
-		(*vars)->split_c[(*vars)->j][(*vars)->k] = s[(*vars)->i];
-		((*vars)->k)++;
-		((*vars)->i)++;
+	(*vars)->split_c[(*vars)->j][(*vars)->k] = s[(*vars)->i];
+	((*vars)->k)++;
+	((*vars)->i)++;
 }
 
-void	fill_split_c(char const *s, char c, t_split *vars)
+void	fill_split_c2(char const *s, char c, t_split *vars)
 {
 	while (1)
 	{
 		if (s[vars->i] == c && vars->nbr_chars != 0)
 		{
-			fill_split_skip_c(s, c, &vars);
+			fill_split_skip_c2(s, c, &vars);
 			(vars->j)++;
 		}
 		else if (s[vars->i] == c && vars->nbr_chars == 0)
-			fill_split_skip_c(s, c, &vars);
+			fill_split_skip_c2(s, c, &vars);
 		else if (s[vars->i] != c && s[vars->i] != '\0')
-			fill_dbl_ptr(s, c, &vars);
+			fill_dbl_ptr2(s, c, &vars);
 		else if (s[vars->i] == '\0')
 		{
-			vars->split_c[vars->j][vars->k] = '\0';
-			(vars->j)++;
-			break;
+			if (vars->k != 0)
+			{
+				vars->split_c[vars->j][vars->k] = '\0';
+				(vars->j)++;
+			}
+			break ;
 		}
 	}
 	vars->split_c[vars->j] = NULL;
 }
 
-char	**ft_strsplit(char const *s, char c)
+char	**ft_strsplit2(char const *s, char c)
 {
 	t_split vars;
 
@@ -92,8 +97,9 @@ char	**ft_strsplit(char const *s, char c)
 	vars.nbr_words = 0;
 	vars.nbr_chars = 0;
 	vars.start = 0;
-	count_words(s, c, &vars);
+	count_words2(s, c, &vars);
+	printf("nbr_words %d\n", vars.nbr_words);
 	vars.split_c = (char**)malloc(sizeof(char*) * (vars.nbr_words + 1));
-	fill_split_c(s, c, &vars);
+	fill_split_c2(s, c, &vars);
 	return (vars.split_c);
 }
