@@ -6,43 +6,87 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/01 16:07:14 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/02 20:24:12 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/03 17:39:21 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
+void		make_path_init(t_make *var)
+{
+	var->length_path = 0;
+	var->i = 0;
+	var->j = 4;
+	var->k = 0;
+}
+
+void		get_home_init(t_make *var)
+{
+	var->length_path = 0;
+	var->i = 0;
+	var->j = 5;
+	var->k = 0;
+}
+
+void		get_old_init(t_make *var)
+{
+	var->length_path = 0;
+	var->i = 0;
+	var->j = 7;
+	var->k = 0;
+}
+
+void		prev_folder(char **cur_folder)
+{
+	int		i;
+	int		temp;
+
+	i = 0;
+	temp = 0;
+	while ((*cur_folder)[i] == '/')
+		i++;
+	if ((*cur_folder)[i] != '\0')
+			temp = i;
+	while ((*cur_folder)[i] != '\0')
+	{
+		while ((*cur_folder)[i] != '/' && (*cur_folder)[i] != '\0')
+			i++;
+		while ((*cur_folder)[i] == '/')
+			i++;
+		if ((*cur_folder)[i] != '\0')
+			temp = i;
+	}
+	while ((*cur_folder)[temp] != '\0')
+	{
+		(*cur_folder)[temp] = 0;
+		temp++;
+	}
+}
+
 char		*make_path(t_main **vars)
 {
-	int		length_path;
-	int		i;
-	int		k;
-	int		j;
-	char	*path;
+	t_make	var;
 
-	length_path = 0;
-	i = 0;
-	j = 4;
-	k = 0;
-	while ((*vars)->env[i] != '\0')
+	make_path_init(&var);
+	while ((*vars)->env[var.i] != '\0')
 	{
-		if ((*vars)->env[i][0] == 'P' && (*vars)->env[i][1] == 'W' &&
-			(*vars)->env[i][2] == 'D' && (*vars)->env[i][3] == '=')
+		if ((*vars)->env[var.i][0] == 'P' && (*vars)->env[var.i][1] == 'W' &&
+			(*vars)->env[var.i][2] == 'D' && (*vars)->env[var.i][3] == '=')
 		{
-			length_path = ft_strlen((*vars)->env[i]) - 3;
-			path = (char*)malloc(sizeof(char) * length_path);
-			while (((*vars)->env)[i][j] != '\0')
+			var.length_path = ft_strlen((*vars)->env[var.i]) - 3;
+			var.path = (char*)malloc(sizeof(char) * var.length_path);
+			while (((*vars)->env)[var.i][var.j] != '\0')
 			{
-				path[k] = ((*vars)->env)[i][j];
-				k++;
-				j++;
+				(var.path)[var.k] = ((*vars)->env)[var.i][var.j];
+				(var.k)++;
+				(var.j)++;
 			}
-			path[k] = '\0';
+			(var.path)[var.k] = '\0';
 			break;
 		}
-		i++;
+		(var.i)++;
 	}
-	return (path);
+	return (var.path);
 }
 
 void		end_str(char **path, int k)
@@ -61,71 +105,57 @@ void		end_str(char **path, int k)
 
 char		*get_home(t_main **vars)
 {
-	int		length_path;
-	int		i;
-	int		k;
-	int		j;
-	char	*path;
+	t_make	var;
 
-	length_path = 0;
-	i = 0;
-	j = 5;
-	k = 0;
-	while ((*vars)->env[i] != '\0')
+	get_home_init(&var);
+	while ((*vars)->env[var.i] != '\0')
 	{
-		if ((*vars)->env[i][0] == 'H' && (*vars)->env[i][1] == 'O' &&
-			(*vars)->env[i][2] == 'M' && (*vars)->env[i][3] == 'E' &&
-			(*vars)->env[i][4] == '=')
+		if ((*vars)->env[var.i][0] == 'H' && (*vars)->env[var.i][1] == 'O' &&
+			(*vars)->env[var.i][2] == 'M' && (*vars)->env[var.i][3] == 'E' &&
+			(*vars)->env[var.i][4] == '=')
 		{
-			length_path = ft_strlen((*vars)->env[i]) - 4;
-			path = (char*)malloc(sizeof(char) * length_path + 1);
-			while (((*vars)->env)[i][j] != '\0')
+			var.length_path = ft_strlen((*vars)->env[var.i]) - 4;
+			var.path = (char*)malloc(sizeof(char) * var.length_path);
+			while (((*vars)->env)[var.i][var.j] != '\0')
 			{
-				path[k] = ((*vars)->env)[i][j];
-				k++;
-				j++;
+				(var.path)[var.k] = ((*vars)->env)[var.i][var.j];
+				(var.k)++;
+				(var.j)++;
 			}
-			end_str(&path, k);
+			(var.path)[var.k] = '\0';
 			break;
 		}
-		i++;
+		(var.i)++;
 	}
-	return (path);
+	return (var.path);
 }
 
 char		*get_old_pwd(t_main **vars)
 {
-	int		length_path;
-	int		i;
-	int		k;
-	int		j;
-	char	*path;
+	t_make	var;
 
-	length_path = 0;
-	i = 0;
-	j = 7;
-	k = 0;
-	while ((*vars)->env[i] != '\0')
+	get_old_init(&var);
+	while ((*vars)->env[var.i] != '\0')
 	{
-		if ((*vars)->env[i][0] == 'O' && (*vars)->env[i][1] == 'L' &&
-			(*vars)->env[i][2] == 'D' && (*vars)->env[i][3] == 'P' &&
-			(*vars)->env[i][4] == 'W' && (*vars)->env[i][5] == 'D' &&
-			(*vars)->env[i][6] == '=')
+		if ((*vars)->env[var.i][0] == 'O' && (*vars)->env[var.i][1] == 'L' &&
+			(*vars)->env[var.i][2] == 'D' && (*vars)->env[var.i][3] == 'P' &&
+			(*vars)->env[var.i][4] == 'W' && (*vars)->env[var.i][5] == 'D' &&
+			(*vars)->env[var.i][6] == '=' )
 		{
-			length_path = ft_strlen((*vars)->env[i]) - 6;
-			path = (char*)malloc(sizeof(char) * length_path + 1);
-			while (((*vars)->env)[i][j] != '\0')
+			var.length_path = ft_strlen((*vars)->env[var.i]) - 6;
+			var.path = (char*)malloc(sizeof(char) * var.length_path);
+			while (((*vars)->env)[var.i][var.j] != '\0')
 			{
-				path[k] = ((*vars)->env)[i][j];
-				k++;
-				j++;
+				(var.path)[var.k] = ((*vars)->env)[var.i][var.j];
+				(var.k)++;
+				(var.j)++;
 			}
-			end_str(&path, k);
+			(var.path)[var.k] = '\0';
 			break;
 		}
-		i++;
+		(var.i)++;
 	}
-	return (path);
+	return (var.path);
 }
 
 void		free_temp(char **temp)
@@ -138,35 +168,39 @@ void		free_temp(char **temp)
 
 }
 
-void		change_pwd(char **new_path, t_main **vars)
+void		change_pwd(char **new_path, t_main **vars, t_paths **var)
 {
 	int		i;
-	char	*temp;
 
 	i = 0;
-	temp = NULL;
+	(*var)->cur_path = make_path(vars);
+	(*var)->old_path = get_old_pwd(vars);
 	while ((*vars)->env[i] != '\0')
 	{
 		if ((*vars)->env[i][0] == 'P' && (*vars)->env[i][1] == 'W' &&
 			(*vars)->env[i][2] == 'D' && (*vars)->env[i][3] == '=')
 		{
 			free_temp(&(*vars)->env[i]);
-			(*vars)->env[i] = ft_strjoin("PWD=", (temp = ft_strdup(*new_path)));
-			free_temp(&temp);
+			free_temp(&(*var)->cur_path);
+			(*vars)->env[i] = ft_strjoin("PWD=", ((*var)->cur_path = ft_strdup(*new_path)));
+//			printf("new->cur_path: %s\n", (*var)->old_path);
+//			printf("new->old_path: %s\n", (*var)->old_path);
+//			printf("(*vars)->env[%d]: %s\n", i, (*vars)->env[i]);
 			break;
 		}
 		i++;
 	}
-
+	printf("new->cur_path: %s\n", (*var)->cur_path);
+	printf("new->old_path: %s\n", (*var)->old_path);
 }
 
 void		change_old_pwd(t_main **vars, t_paths **var)
 {
 	int		i;
-	char	*temp;
 
 	i = 0;
-	temp = NULL;
+	(*var)->cur_path = make_path(vars);
+	(*var)->old_path = get_old_pwd(vars);
 	while ((*vars)->env[i] != '\0')
 	{
 		if ((*vars)->env[i][0] == 'O' && (*vars)->env[i][1] == 'L' &&
@@ -175,36 +209,40 @@ void		change_old_pwd(t_main **vars, t_paths **var)
 			(*vars)->env[i][6] == '=')
 		{
 			free_temp(&(*vars)->env[i]);
-			(*vars)->env[i] = ft_strjoin("OLDPWD=", (temp = ft_strdup((*var)->cur_path)));
-			free_temp(&temp);
+			free_temp(&(*var)->old_path);
+			(*vars)->env[i] = ft_strjoin("OLDPWD=", ((*var)->old_path = ft_strdup((*var)->cur_path)));
+//			printf("old->cur_path: %s\n", (*var)->cur_path);
+//			printf("old->old_path: %s\n", (*var)->old_path);
+//			printf("(*vars)->env[%d]: %s\n", i, (*vars)->env[i]);
 			break;
 		}
 		i++;
 	}
-
+	printf("old->cur_path: %s\n", (*var)->cur_path);
+	printf("old->old_path: %s\n", (*var)->old_path);
 }
 
 void		change_env_pwd(char **new_pwd, t_paths **var, t_main **vars)
 {
-	int		i;
+//	int		i;
 
-	i = 0;
-	while ((*vars)->env[i] != NULL)
-	{
-		printf("%s\n", (*vars)->env[i]);
-		i++;
-	}
+//	i = 0;
+//	while ((*vars)->env[i] != NULL)
+//	{
+//		printf("%s\n", (*vars)->env[i]);
+//		i++;
+//	}
 	change_old_pwd(vars, var);
-	change_pwd(new_pwd, vars);
-	i = 0;
-	while ((*vars)->env[i] != NULL)
-	{
-		printf("%s\n", (*vars)->env[i]);
-		i++;
-	}
+	change_pwd(new_pwd, vars, var);
+//	i = 0;
+//	while ((*vars)->env[i] != NULL)
+//	{
+//		printf("%s\n", (*vars)->env[i]);
+//		i++;
+//	}
 }
 
-void		handle_cd(t_main **vars, t_paths *var)
+void		handle_cd(t_main **vars, t_paths **var)
 {
 	char	**split_path;
 
@@ -212,32 +250,42 @@ void		handle_cd(t_main **vars, t_paths *var)
 	split_path = ft_strsplit2((*vars)->split_args[1], '/');
 	if (split_path[0][0] == '~' && split_path[0][1] == '\0')
 	{
-		chdir(var->cur_home);
-		change_env_pwd(&(var->cur_home), &var, vars);
+		change_env_pwd(&((*var)->cur_home), var, vars); // add if ~ twice and already at home dont change anything;
+		chdir((*var)->cur_home);
 //change pwd oldpwd
+	}
+	else if (split_path[0][0] == '.' && split_path[0][1] == '.' && split_path[0][2] == '\0')
+	{
+		prev_folder(&((*var)->cur_home));
+		change_env_pwd(&((*var)->cur_home), var, vars);
+		chdir((*var)->cur_home);
+	}
+	else if (split_path[0][0] == '.' && split_path[0][1] == '\0')
+	{
+		change_env_pwd(&((*var)->cur_home), var, vars);
+		chdir((*var)->cur_home);
+//change pwd oldpwd
+	}
+	else if  (split_path[0][0] == '.' && split_path[0][0] == '~')
+	{
+//build new path
+//change env;
 	}
 	else
 		ft_putstr("Not handled Yet\n");
-//	if (split_path == NULL)
-//		ft_putstr("NULL\n");
-//	while (split_path[i] != NULL)
-//	{
-//		printf("split_path[%d]: %s\n", i,split_path[i]);
-//		i++;
-//	}
 }
 
-void		cd_cmd(t_main **vars)
+void		cd_cmd(t_main **vars, t_paths **var)
 {
-	t_paths	var;
-
-	var.cur_path = make_path(vars);
-	var.cur_home = get_home(vars);
-	var.old_path = get_old_pwd(vars);
-	printf("%s\n", var.cur_path);
-	printf("%s\n", var.cur_home);
-	printf("%s\n", var.old_path);
-	printf("command :%s\n", (*vars)->command);
+	(*var)->cur_path = make_path(vars);
+	(*var)->cur_home = get_home(vars);
+	(*var)->old_path = get_old_pwd(vars);
+//	printf("(*vars)->env[13]: %s\n", (*vars)->env[13]);
+//	printf("(*vars)->env[19]: %s\n", (*vars)->env[19]);
+//	printf("%s\n", (*var)->cur_path);
+//	printf("%s\n", (*var)->cur_home);
+//	printf("%s\n", (*var)->old_path);
+//	printf("command :%s\n", (*vars)->command);
 //	while ((*vars)->split_args[i] != NULL)
 //	{
 //		printf("split_args[%d] :%s\n", i, (*vars)->split_args[i]);
@@ -245,13 +293,17 @@ void		cd_cmd(t_main **vars)
 //	}
 //if ~
 	if (((*vars)->split_args[2] == NULL ) && (*vars)->split_args[1] != NULL)
-		handle_cd(vars, &var);
+		handle_cd(vars, var);
 	else
 	{
 		ft_putstr("cd uses 1 argument only\n");
 		exit(0);
 	}
-	exit(0);
+//	printf("last->cur_path: %s\n", (*var)->cur_path);
+//	printf("last->old_path: %s\n", (*var)->old_path);
+//	printf("(*vars)->env[13]: %s\n", (*vars)->env[13]);
+//	printf("(*vars)->env[19]: %s\n", (*vars)->env[19]);
+//	exit(0);
 //if ~/ else if ~ invalid else ~\0
 //if ..
 //if ../ else if .. invalid else ..\0

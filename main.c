@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/01 14:54:44 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/03 16:29:27 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,24 @@ void		init_main(t_main *vars, int argc, char **argv)
 
 void		while_funcs(t_main *vars)
 {
+	t_paths var;
+	t_paths *temp;
+
+//	(var).cur_path = make_path(&vars);
+//	(var).cur_home = get_home(&vars);
+//	(var).old_path = get_old_pwd(&vars);
+	temp = &var;
 	ft_split_args(&vars);
-	ft_fork(&vars);
+	if (ft_strcmp(vars->command, "cd") == 0)
+		execute(vars, &temp);
+	else if (ft_strcmp(vars->command, "setenv") == 0)
+		execute(vars, &temp);
+	else if (ft_strcmp(vars->command, "unsetenv") == 0)
+		execute(vars, &temp);
+	else if (ft_strcmp(vars->command, "env") == 0)
+		execute(vars, &temp);
+	else
+		ft_fork(&vars, &var);
 	ft_putstr("$> ");
 }
 

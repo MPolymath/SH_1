@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/02 19:55:21 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/03 16:28:26 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,20 @@ typedef struct	s_paths
 	char		*old_path;
 }				t_paths;
 
+typedef struct	s_make
+{
+	int			length_path;
+	int			i;
+	int			k;
+	int			j;
+	char		*path;
+}				t_make;
+
 void			cpy_env(char **envp, t_main *vars);
 void			exec_others_cmd(t_main **vars);
-void			execute(t_main *vars);
-void			ft_fork(t_main **vars);
-void			cd_cmd(t_main **vars);
+void			execute(t_main *vars, t_paths **var);
+void			ft_fork(t_main **vars, t_paths *var);
+void			cd_cmd(t_main **vars, t_paths **var);
 void			setenv_cmd(t_main **vars);
 void			unsetenv_cmd(t_main **vars);
 void			env_cmd(t_main **vars);

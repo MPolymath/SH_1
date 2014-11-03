@@ -6,13 +6,13 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/10/12 21:46:54 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/03 16:27:39 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
-void	ft_fork(t_main **vars)
+void	ft_fork(t_main **vars, t_paths *var)
 {
 	int	pid;
 
@@ -20,7 +20,7 @@ void	ft_fork(t_main **vars)
 		exit(0);
 	pid = fork();
 	if (pid == 0)
-		execute(*vars);
+		execute(*vars, &var);
 	else if (pid > 0)
 		wait(NULL);
 	else
