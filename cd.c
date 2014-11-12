@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/01 16:07:14 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/03 17:39:21 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/12 16:23:49 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,15 +183,10 @@ void		change_pwd(char **new_path, t_main **vars, t_paths **var)
 			free_temp(&(*vars)->env[i]);
 			free_temp(&(*var)->cur_path);
 			(*vars)->env[i] = ft_strjoin("PWD=", ((*var)->cur_path = ft_strdup(*new_path)));
-//			printf("new->cur_path: %s\n", (*var)->old_path);
-//			printf("new->old_path: %s\n", (*var)->old_path);
-//			printf("(*vars)->env[%d]: %s\n", i, (*vars)->env[i]);
 			break;
 		}
 		i++;
 	}
-	printf("new->cur_path: %s\n", (*var)->cur_path);
-	printf("new->old_path: %s\n", (*var)->old_path);
 }
 
 void		change_old_pwd(t_main **vars, t_paths **var)
@@ -211,35 +206,44 @@ void		change_old_pwd(t_main **vars, t_paths **var)
 			free_temp(&(*vars)->env[i]);
 			free_temp(&(*var)->old_path);
 			(*vars)->env[i] = ft_strjoin("OLDPWD=", ((*var)->old_path = ft_strdup((*var)->cur_path)));
-//			printf("old->cur_path: %s\n", (*var)->cur_path);
-//			printf("old->old_path: %s\n", (*var)->old_path);
-//			printf("(*vars)->env[%d]: %s\n", i, (*vars)->env[i]);
 			break;
 		}
 		i++;
 	}
-	printf("old->cur_path: %s\n", (*var)->cur_path);
-	printf("old->old_path: %s\n", (*var)->old_path);
 }
 
 void		change_env_pwd(char **new_pwd, t_paths **var, t_main **vars)
 {
-//	int		i;
-
-//	i = 0;
-//	while ((*vars)->env[i] != NULL)
-//	{
-//		printf("%s\n", (*vars)->env[i]);
-//		i++;
-//	}
 	change_old_pwd(vars, var);
 	change_pwd(new_pwd, vars, var);
-//	i = 0;
-//	while ((*vars)->env[i] != NULL)
-//	{
-//		printf("%s\n", (*vars)->env[i]);
-//		i++;
-//	}
+}
+
+void		path_constr(t_paths **var, t_main **vars, char **split_path)
+{
+	int		i;
+	char	*full_path;
+
+	i = 0;
+	full_path = ft_strdup((*var)->cur_path);
+	var = var;
+	while (split_path[i] != '\0')
+	{
+		if (i == 0 && (ft_strcmp(split_path[i], "~") == 0))
+			full_path =  (*var)->cur_home;
+		else if (ft_strcmp(split_path[i], "..") == 0)
+			prev_folder(&full_path);
+		else if (ft_strcmp(split_path[i], ".") != 0)
+			full_path = ft_strjoin(full_path, split_path[i]);
+		i++;
+	}
+	if ((*var)->cur_path != NULL && full_path != NULL)
+	{
+		free((*var)->cur_path);
+		(*var)->cur_path = full_path;
+	}
+	printf("(*var)->cur_path: %s\n", full_path);
+	change_env_pwd(&full_path, var, vars);
+	chdir((*var)->cur_path);
 }
 
 void		handle_cd(t_main **vars, t_paths **var)
@@ -248,29 +252,24 @@ void		handle_cd(t_main **vars, t_paths **var)
 
 	split_path = NULL;
 	split_path = ft_strsplit2((*vars)->split_args[1], '/');
-	if (split_path[0][0] == '~' && split_path[0][1] == '\0')
+	if ((ft_strcmp(split_path[0], "~") == 0) && split_path[1] == '\0')
 	{
-		change_env_pwd(&((*var)->cur_home), var, vars); // add if ~ twice and already at home dont change anything;
+		change_env_pwd(&((*var)->cur_home), var, vars);
 		chdir((*var)->cur_home);
-//change pwd oldpwd
 	}
-	else if (split_path[0][0] == '.' && split_path[0][1] == '.' && split_path[0][2] == '\0')
+	else if ((ft_strcmp(split_path[0], "..") == 0) && split_path[1] == '\0')
 	{
 		prev_folder(&((*var)->cur_home));
 		change_env_pwd(&((*var)->cur_home), var, vars);
 		chdir((*var)->cur_home);
 	}
-	else if (split_path[0][0] == '.' && split_path[0][1] == '\0')
+	else if (ft_strcmp(split_path[0], ".") == 0 && split_path[1] == '\0')
 	{
 		change_env_pwd(&((*var)->cur_home), var, vars);
 		chdir((*var)->cur_home);
-//change pwd oldpwd
 	}
-	else if  (split_path[0][0] == '.' && split_path[0][0] == '~')
-	{
-//build new path
-//change env;
-	}
+	else if  ((split_path[0][0] == '.' || split_path[0][0] == '~') && split_path[1][0] != '\0')
+		path_constr(var, vars, split_path);
 	else
 		ft_putstr("Not handled Yet\n");
 }
@@ -280,18 +279,6 @@ void		cd_cmd(t_main **vars, t_paths **var)
 	(*var)->cur_path = make_path(vars);
 	(*var)->cur_home = get_home(vars);
 	(*var)->old_path = get_old_pwd(vars);
-//	printf("(*vars)->env[13]: %s\n", (*vars)->env[13]);
-//	printf("(*vars)->env[19]: %s\n", (*vars)->env[19]);
-//	printf("%s\n", (*var)->cur_path);
-//	printf("%s\n", (*var)->cur_home);
-//	printf("%s\n", (*var)->old_path);
-//	printf("command :%s\n", (*vars)->command);
-//	while ((*vars)->split_args[i] != NULL)
-//	{
-//		printf("split_args[%d] :%s\n", i, (*vars)->split_args[i]);
-//		i++;
-//	}
-//if ~
 	if (((*vars)->split_args[2] == NULL ) && (*vars)->split_args[1] != NULL)
 		handle_cd(vars, var);
 	else
@@ -299,16 +286,4 @@ void		cd_cmd(t_main **vars, t_paths **var)
 		ft_putstr("cd uses 1 argument only\n");
 		exit(0);
 	}
-//	printf("last->cur_path: %s\n", (*var)->cur_path);
-//	printf("last->old_path: %s\n", (*var)->old_path);
-//	printf("(*vars)->env[13]: %s\n", (*vars)->env[13]);
-//	printf("(*vars)->env[19]: %s\n", (*vars)->env[19]);
-//	exit(0);
-//if ~/ else if ~ invalid else ~\0
-//if ..
-//if ../ else if .. invalid else ..\0
-//if .
-//if ./ else if . invalid else .\0
-//if /
-//if ends with // or ./ * infinity
 }

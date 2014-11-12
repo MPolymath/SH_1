@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/03 16:28:26 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/12 18:00:32 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,6 @@ char			**ft_split_path(char **envp, char ***env);
 void			init_main(t_main *vars, int argc, char **argv);
 void			while_funcs(t_main *vars);
 void			main_body(t_main *vars);
+int				find_var(t_main **vars);
+void			remove_var(t_main **vars);
 #endif
