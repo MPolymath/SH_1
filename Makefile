@@ -6,7 +6,7 @@
 #    By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/04/20 23:02:19 by mdiouf            #+#    #+#              #
-#    Updated: 2014/11/12 18:18:44 by mdiouf           ###   ########.fr        #
+#    Updated: 2014/11/13 13:45:44 by mdiouf           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRCS = buildin.c \
 		main.c \
 		cd.c \
 		setenv.c \
+		env.c \
 		space_mnp.c \
 		split_args.c \
 		split_paths.c

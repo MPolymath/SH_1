@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 20:50:44 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/12 18:17:44 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/13 17:23:10 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void		setenv_cmd(t_main **vars)
 	if (((*vars)->split_args)[0] != NULL &&
 		((*vars)->split_args)[1] != NULL && ((*vars)->split_args)[2] != NULL
 		&& ((*vars)->split_args)[3] == NULL)
-		remove_var(vars);
+		set_var(vars);
 }
 
 void		env_cmd(t_main **vars)
 {
 	vars = vars;
-	ft_putstr(" env is not done\n");
+	ft_env(vars);
 }

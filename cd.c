@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/01 16:07:14 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/12 16:23:49 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/13 16:46:27 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ void		prev_folder(char **cur_folder)
 		while ((*cur_folder)[i] == '/')
 			i++;
 		if ((*cur_folder)[i] != '\0')
-			temp = i;
+				temp = i;
 	}
+	if ((*cur_folder)[temp - 1] == '/')
+		(*cur_folder)[temp - 1] = '\0';
 	while ((*cur_folder)[temp] != '\0')
 	{
 		(*cur_folder)[temp] = 0;
@@ -175,6 +177,7 @@ void		change_pwd(char **new_path, t_main **vars, t_paths **var)
 	i = 0;
 	(*var)->cur_path = make_path(vars);
 	(*var)->old_path = get_old_pwd(vars);
+	printf("%s\n", *new_path);
 	while ((*vars)->env[i] != '\0')
 	{
 		if ((*vars)->env[i][0] == 'P' && (*vars)->env[i][1] == 'W' &&
@@ -182,7 +185,9 @@ void		change_pwd(char **new_path, t_main **vars, t_paths **var)
 		{
 			free_temp(&(*vars)->env[i]);
 			free_temp(&(*var)->cur_path);
-			(*vars)->env[i] = ft_strjoin("PWD=", ((*var)->cur_path = ft_strdup(*new_path)));
+			(*var)->cur_path = NULL;
+			(*var)->cur_path = ft_strdup(*new_path);
+			(*vars)->env[i] = ft_strjoin("PWD=", (*var)->cur_path);
 			break;
 		}
 		i++;
@@ -214,8 +219,17 @@ void		change_old_pwd(t_main **vars, t_paths **var)
 
 void		change_env_pwd(char **new_pwd, t_paths **var, t_main **vars)
 {
+	int		i;
+
+	i = 0;
 	change_old_pwd(vars, var);
+	printf("new_pwd: %s\n", *new_pwd);
 	change_pwd(new_pwd, vars, var);
+	while ((*vars)->env[i] != NULL)
+	{
+		printf("%s\n", (*vars)->env[i]);
+		i++;
+	}
 }
 
 void		path_constr(t_paths **var, t_main **vars, char **split_path)
@@ -233,7 +247,10 @@ void		path_constr(t_paths **var, t_main **vars, char **split_path)
 		else if (ft_strcmp(split_path[i], "..") == 0)
 			prev_folder(&full_path);
 		else if (ft_strcmp(split_path[i], ".") != 0)
+		{
+			full_path = ft_strjoin(full_path, "/");
 			full_path = ft_strjoin(full_path, split_path[i]);
+		}
 		i++;
 	}
 	if ((*var)->cur_path != NULL && full_path != NULL)
@@ -241,9 +258,16 @@ void		path_constr(t_paths **var, t_main **vars, char **split_path)
 		free((*var)->cur_path);
 		(*var)->cur_path = full_path;
 	}
-	printf("(*var)->cur_path: %s\n", full_path);
-	change_env_pwd(&full_path, var, vars);
-	chdir((*var)->cur_path);
+	if (chdir((*var)->cur_path) == 0)
+		change_env_pwd(&full_path, var, vars);
+	else
+	{
+		ft_putstr_fd("cd: no such file or directory: ", 2);
+		ft_putstr_fd(full_path, 2);
+		free(full_path);
+		full_path = NULL;
+		ft_putstr_fd("\n", 2);
+	}
 }
 
 void		handle_cd(t_main **vars, t_paths **var)
@@ -252,26 +276,7 @@ void		handle_cd(t_main **vars, t_paths **var)
 
 	split_path = NULL;
 	split_path = ft_strsplit2((*vars)->split_args[1], '/');
-	if ((ft_strcmp(split_path[0], "~") == 0) && split_path[1] == '\0')
-	{
-		change_env_pwd(&((*var)->cur_home), var, vars);
-		chdir((*var)->cur_home);
-	}
-	else if ((ft_strcmp(split_path[0], "..") == 0) && split_path[1] == '\0')
-	{
-		prev_folder(&((*var)->cur_home));
-		change_env_pwd(&((*var)->cur_home), var, vars);
-		chdir((*var)->cur_home);
-	}
-	else if (ft_strcmp(split_path[0], ".") == 0 && split_path[1] == '\0')
-	{
-		change_env_pwd(&((*var)->cur_home), var, vars);
-		chdir((*var)->cur_home);
-	}
-	else if  ((split_path[0][0] == '.' || split_path[0][0] == '~') && split_path[1][0] != '\0')
-		path_constr(var, vars, split_path);
-	else
-		ft_putstr("Not handled Yet\n");
+	path_constr(var, vars, split_path);
 }
 
 void		cd_cmd(t_main **vars, t_paths **var)

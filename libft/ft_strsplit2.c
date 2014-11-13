@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/11 21:08:25 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/02 17:30:04 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/13 16:50:32 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ char	**ft_strsplit2(char const *s, char c)
 	vars.nbr_chars = 0;
 	vars.start = 0;
 	count_words2(s, c, &vars);
-	printf("nbr_words %d\n", vars.nbr_words);
 	vars.split_c = (char**)malloc(sizeof(char*) * (vars.nbr_words + 1));
 	fill_split_c2(s, c, &vars);
 	return (vars.split_c);

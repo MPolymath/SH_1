@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/03 16:29:27 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/13 14:02:37 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ void		while_funcs(t_main *vars)
 //	(var).old_path = get_old_pwd(&vars);
 	temp = &var;
 	ft_split_args(&vars);
-	if (ft_strcmp(vars->command, "cd") == 0)
+	if (ft_strcmp(vars->command, "exit") == 0)
+		exit(0);
+	else if (ft_strcmp(vars->command, "cd") == 0)
 		execute(vars, &temp);
 	else if (ft_strcmp(vars->command, "setenv") == 0)
 		execute(vars, &temp);
