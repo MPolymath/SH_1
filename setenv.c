@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 16:33:38 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 16:54:25 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/14 21:02:14 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,17 +213,35 @@ void		set_var(t_main **vars)
 	int		posy;
 	int		cnt_env;
 	int		i;
+	char	**temp_env;
 
 	i = 0;
 	posy = 0;
 	cnt_env = 0;
 	while (((*vars)->env)[i] != NULL)
-	{
 		i++;
-		cnt_env++;
-	}
+	cnt_env = i;
+	i = 0;
 	if ((posy = find_var(vars)) == -1)
+	{
+		temp_env = (char**)malloc(sizeof(char*) * (cnt_env + 2));
+		while ((*vars)->env[i] != NULL)
+		{
+			temp_env[i] = ft_strdup((*vars)->env[i]);
+			i++;
+		}
+		temp_env[i] = ft_strjoin((*vars)->split_args[1], "=");
+		temp_env[i] = ft_strjoin(temp_env[i] , (*vars)->split_args[2]);
+		temp_env[i + 1] = NULL;
+		i = 0;
+		if ((*vars)->env != NULL)
+		{
+			free((*vars)->env);
+			(*vars)->env = NULL;
+		}
+		(*vars)->env = temp_env;
 		ft_putstr_fd("Variable not found\n", 2);
+	}
 	else if (ft_strcmp((*vars)->split_args[1], "PATH=") == 0 || ft_strcmp((*vars)->split_args[1], "PWD=") == 0 || ft_strcmp((*vars)->split_args[1], "OLDPWD=") == 0)
 	{
 		ft_putstr_fd("This variable cannot be altered\n", 2);

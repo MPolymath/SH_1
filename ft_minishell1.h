@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 16:47:59 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/14 21:07:10 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void			while_funcs(t_main *vars);
 void			main_body(t_main *vars);
 int				find_var(t_main **vars);
 void			set_var(t_main **vars);
+void			unset_var(t_main **vars);
 void			set_var_env(t_main **vars);
 void			get_var_value(char ***var_value, t_main **vars);
 void			ft_env(t_main **vars);
