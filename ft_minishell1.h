@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/13 17:50:08 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/14 16:47:59 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct	s_main
 	int			args_nbr;
 	int			i;
 	char		**env;
+	char		**temp_env;
 	char		*line;
 	char		*tmp;
 	char		*command;
@@ -82,4 +83,5 @@ void			set_var(t_main **vars);
 void			set_var_env(t_main **vars);
 void			get_var_value(char ***var_value, t_main **vars);
 void			ft_env(t_main **vars);
+void			free_temp(char **temp);
 #endif

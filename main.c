@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/13 14:02:37 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/14 15:30:14 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void		init_main(t_main *vars, int argc, char **argv)
 	vars->args_nbr = 0;
 	vars->i = 0;
 	vars->env = NULL;
+	vars->temp_env = NULL;
 	vars->line = NULL;
 	vars->tmp = NULL;
 	vars->command = NULL;
