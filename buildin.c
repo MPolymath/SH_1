@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 20:50:44 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 21:05:05 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 19:20:57 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void		setenv_cmd(t_main **vars)
 		set_var(vars);
 }
 
-void		env_cmd(t_main **vars)
+void		env_cmd(t_main **vars, t_paths **var)
 {
 	vars = vars;
-	ft_env(vars);
+	ft_env(vars, var);
 }

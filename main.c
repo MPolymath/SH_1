@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 15:30:14 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 19:45:01 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,26 @@ void		init_main(t_main *vars, int argc, char **argv)
 	ft_putstr("$> ");
 }
 
-void		while_funcs(t_main *vars)
+void		while_funcs(t_main **vars, t_paths **var)
 {
-	t_paths var;
-	t_paths *temp;
-
+//	t_paths *temp;
 //	(var).cur_path = make_path(&vars);
 //	(var).cur_home = get_home(&vars);
 //	(var).old_path = get_old_pwd(&vars);
-	temp = &var;
-	ft_split_args(&vars);
-	if (ft_strcmp(vars->command, "exit") == 0)
+//	temp = &var;
+	ft_split_args(vars);
+	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
-	else if (ft_strcmp(vars->command, "cd") == 0)
-		execute(vars, &temp);
-	else if (ft_strcmp(vars->command, "setenv") == 0)
-		execute(vars, &temp);
-	else if (ft_strcmp(vars->command, "unsetenv") == 0)
-		execute(vars, &temp);
-	else if (ft_strcmp(vars->command, "env") == 0)
-		execute(vars, &temp);
+	else if (ft_strcmp((*vars)->command, "cd") == 0)
+		execute(vars, var);
+	else if (ft_strcmp((*vars)->command, "setenv") == 0)
+		execute(vars, var);
+	else if (ft_strcmp((*vars)->command, "unsetenv") == 0)
+		execute(vars, var);
+	else if (ft_strcmp((*vars)->command, "env") == 0)
+		execute(vars, var);
 	else
-		ft_fork(&vars, &var);
+		ft_fork(vars, var);
 	ft_putstr("$> ");
 }
 
@@ -79,7 +77,12 @@ void		main_body(t_main *vars)
 int			main(int argc, char **argv, char **envp)
 {
 	t_main	vars;
+	t_main	*temp2;
+	t_paths var;
+	t_paths *temp;
 
+	temp = &var;
+	temp2 = &vars;
 	init_main(&vars, argc, argv);
 	cpy_env(envp, &vars);
 	vars.paths = ft_split_path(envp, &(vars.env));
@@ -87,7 +90,7 @@ int			main(int argc, char **argv, char **envp)
 	{
 		if (vars.line != NULL)
 		{
-			while_funcs(&vars);
+			while_funcs(&temp2, &temp);
 			main_body(&vars);
 		}
 		else

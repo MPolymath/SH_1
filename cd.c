@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/01 16:07:14 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/13 16:46:27 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 23:04:50 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,18 +240,23 @@ void		path_constr(t_paths **var, t_main **vars, char **split_path)
 	i = 0;
 	full_path = ft_strdup((*var)->cur_path);
 	var = var;
-	while (split_path[i] != '\0')
+	if ((*vars)->split_args[1] == '\0')
+		full_path = (*var)->cur_home;
+	else
 	{
-		if (i == 0 && (ft_strcmp(split_path[i], "~") == 0))
-			full_path =  (*var)->cur_home;
-		else if (ft_strcmp(split_path[i], "..") == 0)
-			prev_folder(&full_path);
-		else if (ft_strcmp(split_path[i], ".") != 0)
+		while (split_path[i] != '\0')
 		{
-			full_path = ft_strjoin(full_path, "/");
-			full_path = ft_strjoin(full_path, split_path[i]);
+			if (i == 0 && (ft_strcmp(split_path[i], "~") == 0))
+				full_path =  (*var)->cur_home;
+			else if (ft_strcmp(split_path[i], "..") == 0)
+				prev_folder(&full_path);
+			else if (ft_strcmp(split_path[i], ".") != 0)
+			{
+				full_path = ft_strjoin(full_path, "/");
+				full_path = ft_strjoin(full_path, split_path[i]);
+			}
+			i++;
 		}
-		i++;
 	}
 	if ((*var)->cur_path != NULL && full_path != NULL)
 	{
@@ -275,7 +280,8 @@ void		handle_cd(t_main **vars, t_paths **var)
 	char	**split_path;
 
 	split_path = NULL;
-	split_path = ft_strsplit2((*vars)->split_args[1], '/');
+	if ((*vars)->split_args[1] != NULL)
+		split_path = ft_strsplit2((*vars)->split_args[1], '/');
 	path_constr(var, vars, split_path);
 }
 
@@ -284,7 +290,7 @@ void		cd_cmd(t_main **vars, t_paths **var)
 	(*var)->cur_path = make_path(vars);
 	(*var)->cur_home = get_home(vars);
 	(*var)->old_path = get_old_pwd(vars);
-	if (((*vars)->split_args[2] == NULL ) && (*vars)->split_args[1] != NULL)
+	if (((*vars)->split_args[2] == NULL) || (*vars)->split_args[1] == NULL)
 		handle_cd(vars, var);
 	else
 	{

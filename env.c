@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 13:40:44 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 16:47:40 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 19:20:14 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int				find_sign(char *str)
 	return (0);
 }
 
-void			ft_env(t_main **vars)
+void			ft_env(t_main **vars, t_paths **var)
 {
 	int			i;
 
@@ -52,7 +52,7 @@ void			ft_env(t_main **vars)
 	else if (find_sign((*vars)->split_args[1]) == 1)
 	{
 		//setenv
-		set_var_env(vars);
+		set_var_env(vars, var);
 		//re do split args
 		//relaunch function launching
 		ft_putstr("Something must be done\n");

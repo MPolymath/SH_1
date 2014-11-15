@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 16:33:38 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 21:02:14 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 22:50:05 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		get_var_value(char ***var_value, t_main **vars)
 	while ((*vars)->split_args[1][i] != '=')
 		i++;
 	limit = i + 1;
-	(*var_value)[0] = (char*)malloc(sizeof(char) * (i + 1));
+	(*var_value)[0] = (char*)malloc(sizeof(char) * (limit + 1));
 	i = 0;
 	while (i != limit)
 	{
@@ -101,19 +101,19 @@ void		cpy_envp(t_main **vars, char **env)
 	while (env[i] != NULL)
 		i++;
 	if ((*vars)->temp_env == NULL)
-		(*vars)->temp_env = (char **)malloc(sizeof(char) * (i + 1));
+		(*vars)->temp_env = (char **)malloc(sizeof(char*) * (i + 1));
 	else
 		return ;
 	i = 0;
 	while (env[i] != NULL)
 	{
 		(*vars)->temp_env[i] = ft_strdup(env[i]);
-		printf("temp_env: %s\n", (*vars)->temp_env[i]);
 		i++;
 	}
+	(*vars)->temp_env[i] = NULL;
 }
 
-void		set_var_env(t_main **vars)
+void		set_var_env(t_main **vars, t_paths **var)
 {
 	int		posy;
 	int		cnt_env;
@@ -142,8 +142,8 @@ void		set_var_env(t_main **vars)
 			i++;
 		cnt_env = i;
 		i = 0;
-		new_env = (char**)malloc(sizeof(char) * (cnt_env + 3));
-		while (i != cnt_env)
+		new_env = (char**)malloc(sizeof(char*) * (cnt_env + 2)); // 3 original
+		while ((*vars)->env[i] != NULL)
 		{
 			new_env[i] = ((*vars)->env)[i];
 			i++;
@@ -186,7 +186,6 @@ void		set_var_env(t_main **vars)
 	printf("%d\n", i);
 	size_new_line = ft_strlen((*vars)->line) - i;
 	temp = (*vars)->line;
-	printf("%d\n", size_new_line);
 	if (size_new_line != 0)
 	{
 		(*vars)->line = (char*)malloc(sizeof(char) * (size_new_line + 1));
@@ -197,14 +196,29 @@ void		set_var_env(t_main **vars)
 			j++;
 		}
 		(*vars)->line[j] = '\0';
+//		while ((*vars)->line[j] != '\0')
+//		{
+//			(*vars)->line[j] = '\0';
+//			j++;
+//		}
+		free_temp(&temp);
+		free_temp(&((*vars)->command));
+		free((*vars)->split_args);
+		(*vars)->split_args = NULL;
+		temp = NULL;
+		ft_split_args(vars);
+		while_funcs(vars, var);
 	}
 	else
+	{
+		free((*vars)->line);
 		(*vars)->line = NULL;
-	free_temp(&temp);
-	free_temp(&((*vars)->command));
-	free((*vars)->split_args);
-	(*vars)->split_args = NULL;
-	temp = NULL;
+	}
+//	free_temp(&temp);
+//	free_temp(&((*vars)->command));
+//	free((*vars)->split_args);
+//	(*vars)->split_args = NULL;
+//	temp = NULL;
 //	printf("%s\n", (*vars)->line);
 }
 

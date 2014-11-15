@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/11 21:08:25 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/02 16:54:54 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 20:39:17 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	fill_dbl_ptr(char const *s, char c, t_split **vars)
 			((*vars)->start)++;
 		}
 		(*vars)->split_c[(*vars)->j] = (char*)malloc(sizeof(char) *
-									((*vars)->nbr_chars + 1));
+									((*vars)->nbr_chars + 2));
 	}
 	(*vars)->split_c[(*vars)->j][(*vars)->k] = s[(*vars)->i];
 	((*vars)->k)++;
@@ -96,6 +96,7 @@ char	**ft_strsplit(char const *s, char c)
 	vars.start = 0;
 	count_words(s, c, &vars);
 	vars.split_c = (char**)malloc(sizeof(char*) * (vars.nbr_words + 1));
+	vars.split_c[vars.nbr_words] = NULL;
 	fill_split_c(s, c, &vars);
 	return (vars.split_c);
 }

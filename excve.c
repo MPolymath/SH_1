@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/10 16:46:18 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/15 19:32:27 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,16 @@ void		exec_others_cmd(t_main **vars)
 	}
 }
 
-void		execute(t_main *vars, t_paths **var)
+void		execute(t_main **vars, t_paths **var)
 {
-	if (ft_strcmp(vars->command, "cd") == 0)
-		cd_cmd(&vars, var);
-	else if (ft_strcmp(vars->command, "setenv") == 0)
-		setenv_cmd(&vars);
-	else if (ft_strcmp(vars->command, "unsetenv") == 0)
-		unsetenv_cmd(&vars);
-	else if (ft_strcmp(vars->command, "env") == 0)
-		env_cmd(&vars);
+	if (ft_strcmp((*vars)->command, "cd") == 0)
+		cd_cmd(vars, var);
+	else if (ft_strcmp((*vars)->command, "setenv") == 0)
+		setenv_cmd(vars);
+	else if (ft_strcmp((*vars)->command, "unsetenv") == 0)
+		unsetenv_cmd(vars);
+	else if (ft_strcmp((*vars)->command, "env") == 0)
+		env_cmd(vars, var);
 	else
-		exec_others_cmd(&vars);
+		exec_others_cmd(vars);
 }
