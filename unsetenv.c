@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/12 16:33:38 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/16 18:39:28 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 21:09:00 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void		unset_var(t_main **vars)
 		ft_putstr_fd("Variable not found\n", 2);
 	else if (ft_strcmp((*vars)->split_args[1], "PATH") == 0 ||
 			ft_strcmp((*vars)->split_args[1], "PWD") == 0 ||
-			ft_strcmp((*vars)->split_args[1], "OLDPWD") == 0)
+			ft_strcmp((*vars)->split_args[1], "OLDPWD") == 0 ||
+			ft_strcmp((*vars)->split_args[1], "HOME") == 0)
 		ft_putstr_fd("This variable cannot be altered\n", 2);
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/16 20:44:16 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/16 20:57:54 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 21:09:46 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void		handle_temp_env(t_main **vars, t_var_env *bod)
 		var_found(vars, &bod);
 	else if (ft_strcmp((bod->var_value)[0], "PATH=") == 0 ||
 			ft_strcmp((bod->var_value)[0], "PWD=") == 0 ||
-			ft_strcmp((bod->var_value)[0], "OLDPWD=") == 0)
+			ft_strcmp((bod->var_value)[0], "OLDPWD=") == 0 ||
+			ft_strcmp((bod->var_value)[0], "HOME=") == 0)
 		ft_putstr_fd("This variable cannot be altered\n", 2);
 	else
 	{

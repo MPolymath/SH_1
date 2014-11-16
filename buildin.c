@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 20:50:44 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/16 17:39:31 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 21:04:12 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void		unsetenv_cmd(t_main **vars)
 {
 	vars = vars;
 	unset_var(vars);
-	ft_putstr(" unsetenv is not done\n");
 }
 
 void		setenv_cmd(t_main **vars)
