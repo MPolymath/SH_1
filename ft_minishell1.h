@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/15 19:42:10 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 20:54:05 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,19 @@ typedef struct	s_make
 	char		*path;
 }				t_make;
 
+typedef struct	s_var_env
+{
+	int		posy;
+	int		cnt_env;
+	int		i;
+	int		j;
+	int		alpha;
+	int		size_new_line;
+	char	**var_value;
+	char	**new_env;
+	char	*temp;
+}				t_var_env;
+
 void			cpy_env(char **envp, t_main *vars);
 void			exec_others_cmd(t_main **vars);
 void			execute(t_main **vars, t_paths **var);
@@ -84,5 +97,30 @@ void			unset_var(t_main **vars);
 void			set_var_env(t_main **vars, t_paths **var);
 void			get_var_value(char ***var_value, t_main **vars);
 void			ft_env(t_main **vars, t_paths **var);
+void			make_path_init(t_make *var);
+void			get_home_init(t_make *var);
+void			get_old_init(t_make *var);
+void			prev_folder(char **cur_folder);
+char			*make_path(t_main **vars);
+void			end_str(char **path, int k);
+char			*get_home(t_main **vars);
+char			*get_old_pwd(t_main **vars);
 void			free_temp(char **temp);
+void			change_pwd(char **new_path, t_main **vars, t_paths **var);
+void			change_old_pwd(t_main **vars, t_paths **var);
+void			change_env_pwd(char **new_pwd, t_paths **var, t_main **vars);
+void			path_constr(t_paths **var, t_main **vars, char **split_path);
+void			handle_cd(t_main **vars, t_paths **var);
+void			change_old_pwd(t_main **vars, t_paths **var);
+void			change_pwd(char **new_path, t_main **vars, t_paths **var);
+void			free_temp(char **temp);
+char			*get_home(t_main **vars);
+char			*get_old_pwd(t_main **vars);
+char			*make_path(t_main **vars);
+void			init_set_var_env(t_var_env *bod);
+void			cpy_envp(t_main **vars, char **env);
+void			handle_temp_env(t_main **vars, t_var_env *bod);
+int				exec_temp_command(t_main **vars, t_var_env *bod);
+void			if_temp_command(t_main **vars, t_paths **var, t_var_env *bod);
+int				find_var_env(t_main **vars, char **vars_value);
 #endif

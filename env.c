@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/13 13:40:44 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/15 19:20:14 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 18:41:15 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,21 @@ int				find_sign(char *str)
 	return (0);
 }
 
+void			ft_env_a(t_main **vars, int *i)
+{
+	*i = 2;
+	if ((*vars)->split_args[2] != NULL)
+	{
+		while ((*vars)->split_args[*i] != NULL)
+		{
+			ft_putstr_fd((*vars)->split_args[*i], 2);
+			(*i)++;
+			ft_putstr_fd(" ", 2);
+		}
+		ft_putstr_fd("cannot be executed, env missing.\n", 2);
+	}
+}
+
 void			ft_env(t_main **vars, t_paths **var)
 {
 	int			i;
@@ -35,32 +50,14 @@ void			ft_env(t_main **vars, t_paths **var)
 			ft_putstr("\n");
 			i++;
 		}
-	else if (ft_strcmp(((*vars)->split_args)[1] , "-i") == 0)
-	{
-		i = 2;
-		if ((*vars)->split_args[2] != NULL)
-		{
-			while ((*vars)->split_args[i] != NULL)
-			{
-				ft_putstr_fd((*vars)->split_args[i], 2);
-				i++;
-				ft_putstr_fd(" ", 2);
-			}
-			ft_putstr_fd("cannot be executed, env missing.\n" , 2);
-		}
-	}
+	else if (ft_strcmp(((*vars)->split_args)[1], "-i") == 0)
+		ft_env_a(vars, &i);
 	else if (find_sign((*vars)->split_args[1]) == 1)
-	{
-		//setenv
 		set_var_env(vars, var);
-		//re do split args
-		//relaunch function launching
-		ft_putstr("Something must be done\n");
-	}
 	else
 	{
-		ft_putstr_fd("env: " , 2);
-		ft_putstr_fd(((*vars)->split_args)[1] , 2);
-		ft_putstr_fd(": No such file or directory\n" , 2);
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(((*vars)->split_args)[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 }

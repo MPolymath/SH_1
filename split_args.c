@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 18:47:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/14 14:52:33 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/16 18:38:28 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	args_cpy(t_main **vars, int *start)
 		while (test_space_tab((*vars)->line, *start) == 1)
 			(*start)++;
 	}
-	(*vars)->split_args[var.i] = '\0'; //i+1 might be
+	(*vars)->split_args[var.i] = '\0';
 }
 
 void	ft_split_args(t_main **vars)

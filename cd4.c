@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   cd4.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/09/27 21:40:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/16 16:57:22 by mdiouf           ###   ########.fr       */
+/*   Created: 2014/11/16 20:21:37 by mdiouf            #+#    #+#             */
+/*   Updated: 2014/11/16 20:43:14 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
-#include <stdio.h>
+#include "ft_minishell1.h"
 
-char	*ft_strdup(const char *s1)
+void		end_str(char **path, int k)
 {
-	char	*dest;
-	size_t	len;
-	size_t	i;
-
-	i = 0;
-	len = ft_strlen(s1);
-	dest = (char *)malloc((len + 1) * sizeof(char));
-	while (s1[i])
+	if ((*path)[k - 1] == '/')
 	{
-		dest[i] = s1[i];
-		i++;
+		(*path)[k] = '\0';
+		(*path)[k + 1] = '\0';
 	}
-	dest[i] = '\0';
-	return (dest);
+	else
+	{
+		(*path)[k] = '/';
+		(*path)[k + 1] = '\0';
+	}
 }
