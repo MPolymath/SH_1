@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/17 14:50:17 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/17 16:48:31 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/18 18:51:38 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,11 @@ int			count_and_pipe(char	*full_str)
 		if (full_str[i] == ';' || full_str[i] == '|')
 			cnt = cnt + 2;
 		i++;
+		if (full_str[i] == '\0' && (full_str[i - 1] != ';' && full_str[i - 1] != '|'))
+			cnt = cnt + 1;
 	}
+	if (full_str[i] != '\0')
+		cnt++;
 	return (cnt);
 }
 
@@ -135,9 +139,13 @@ char 		**split_pipe_and(char *full_str)
 			split_str[j][1] = '\0';
 			j++;
 		}
+		else if (full_str[i + 1] == '\0' && (full_str[i] != ';' && full_str[i] != '|'))
+		{
+			split_str[j] = ft_strsub(full_str, start, i - start + 1);
+			j++;
+		}
 		i++;
 	}
-	j++;
 	split_str[j] = NULL;
 	i = 0;
 	while (split_str[i] != NULL)
