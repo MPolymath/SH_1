@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/17 14:50:17 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/18 18:51:38 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/19 14:32:38 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,13 @@ char 		**split_pipe_and(char *full_str)
 		if (full_str[i] == ';' || full_str[i] == '|')
 		{
 			split_str[j] = ft_strsub(full_str, start, i - start);
+			split_str[j] = ft_strtrim(split_str[j]);
+			if (split_str[j][0] == '\0')
+			{
+				free(split_str[j]);
+				ft_putstr_fd("Invalid chain\n", 2);
+				return (NULL);
+			}
 			start = i + 1;
 			j++;
 			split_str[j] = (char*)malloc(sizeof(char) * 2);
@@ -142,6 +149,12 @@ char 		**split_pipe_and(char *full_str)
 		else if (full_str[i + 1] == '\0' && (full_str[i] != ';' && full_str[i] != '|'))
 		{
 			split_str[j] = ft_strsub(full_str, start, i - start + 1);
+			split_str[j] = ft_strtrim(split_str[j]);
+			if (split_str[j][0] == '\0')
+			{
+				free(split_str[j]);
+				split_str[j] = NULL;
+			}
 			j++;
 		}
 		i++;
@@ -153,6 +166,7 @@ char 		**split_pipe_and(char *full_str)
 		printf("split_str[%d] %s\n", i, split_str[i]);
 		i++;
 	}
+	return (split_str);
 }
 
 /*
@@ -167,8 +181,20 @@ void		*insert_node()
 
 int		main(int argc, char **argv)
 {
+	char	**list;
+	int		i;
+
+	i = 0;
 	if (argc == 2)
-		split_pipe_and(argv[1]);
+	{
+		list = split_pipe_and(argv[1]);
+		while (list[i] != NULL)
+		{
+			printf("%s\n", list[i]);
+			i++;
+		}
+		create_tree(&list);
+	}
 	else
 		ft_putstr_fd("Erreur\n", 2);
 }
