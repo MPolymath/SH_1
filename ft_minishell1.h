@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/19 14:29:57 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/21 02:37:52 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ typedef struct		s_tree
 	int				child;
 	char			*cmd;
 	struct s_tree	*left;
+	struct s_tree	*left_two;
 	struct s_tree	*right;
+	struct s_tree	*right2;
+	struct s_tree	*right_two;
 }					t_tree;
 
 void				cpy_env(char **envp, t_main *vars);
