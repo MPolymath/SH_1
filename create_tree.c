@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 19:03:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/21 03:08:06 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/22 02:12:57 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_tree		*ft_new_node(char **command)
 	node->left = NULL;
 	node->left_two = NULL;
 	node->right = NULL;
+	node->right_next = NULL;
 	node->right_two = NULL;
 	return (node);
 }
@@ -38,102 +39,107 @@ void	create_tree(char ***split_commands)
 	int	i;
 	int	j;
 	int	splits;
-	t_tree *root;
-	t_tree *start_child;
-	t_tree *temp;
-	t_tree *temp2;
+	t_ptr	var;
 
+// circular list creation
 	i = 0;
 	j = 0;
 	splits = 0;
-	temp = NULL;
-	if ((root = ft_new_node(NULL)) == NULL)
+	var.temp = NULL;
+	if ((*split_commands)[i] == NULL)
+		return ;
+	if ((var.root = ft_new_node(NULL)) == NULL)
 	{
 		ft_putstr_fd("Malloc returned NULL\n", 2);
 		exit(0);
 	}
 	while ((*split_commands)[i] != NULL)
 	{
-		if (root->child == 0)
+		if ((var.root)->child == 0)
 		{
-			start_child = ft_new_node(&((*split_commands)[i]));
-			root->child += 1;
+			var.start_child = ft_new_node(&((*split_commands)[i]));
+			(var.root)->child += 1;
+			(var.start_child)->left = var.start_child; // test
+			(var.start_child)->right = var.start_child; // test
 		}
 		else
 		{
-			temp = start_child;
-			while (j != (root->child - 1))
+			var.temp = var.start_child;
+			while (j != ((var.root)->child - 1))
 			{
-				temp = temp->right;
+				var.temp = (var.temp)->right;
 				j++;
 			}
 			j = 0;
-			temp->right = ft_new_node(&((*split_commands)[i]));
-			if (root->child == 1)
+			(var.temp)->right = ft_new_node(&((*split_commands)[i]));
+			if ((var.root)->child == 1)
 			{
-				temp->left = temp ->right;
-				temp->right->right = start_child;
-				temp->right->left = temp;
+				(var.temp)->left = (var.temp)->right;
+				(var.temp)->right->right = var.start_child;
+				(var.temp)->right->left = var.temp;
 			}
 			else
 			{
-				start_child->left = temp->right;
-				temp->right->right = start_child;
-				temp->right->left = temp;
+				(var.start_child)->left = (var.temp)->right;
+				(var.temp)->right->right = var.start_child;
+				(var.temp)->right->left = var.temp;
 			}
-			root->child += 1;
+			(var.root)->child += 1;
 		}
 		i++;
+		printf("i: %d\n", i);
 	}
-	temp = start_child;
+// circular list printing
+	printf("root child %d\n", (var.root)->child);
+	var.temp = var.start_child;
 	i = 0;
-	while (i != root->child)
+	while (i != (var.root)->child)
 	{
-		temp = temp->right;
+		printf("temp->cmd: %s\n", (var.temp)->cmd);
+		var.temp = (var.temp)->right;
 		i++;
 	}
-
-	temp = start_child;
-	temp2 = root->right2;
+// binary tree creation
+	var.temp = var.start_child;
+	var.temp2 = (var.root)->right;
 	i = 0;
 	j = 0;
-	while (i != root->child)
+	while (i != (var.root)->child)
 	{
-		if (temp->cmd != NULL && (ft_strcmp(temp->cmd, ";") == 0 || ft_strcmp(temp->cmd, "|") == 0))
+		if ((var.temp)->cmd != NULL && (ft_strcmp((var.temp)->cmd, ";") == 0 || ft_strcmp((var.temp)->cmd, "|") == 0))
 		{
-			if (root->left == NULL)
+			if ((var.root)->left == NULL)
 			{
-				printf("testititititi\n");
-				root->left = temp;
-				temp->left_two = temp->left;
-				temp->right_two = temp->right;
-				if (temp->right != NULL)
-					temp = temp->right;
+				(var.root)->left = var.temp;
+				(var.temp)->left_two = (var.temp)->left;
+				if ((var.root)->child > 2) // test
+					(var.temp)->right_two = (var.temp)->right;
 			}
-			else if (root->right2 == NULL)
+			else if ((var.root)->right_next == NULL)
 			{
-				printf("testatatata\n");
-				root->right2 = temp;
+				(var.root)->right_next = var.temp;
 				j++;
-				temp->left_two = temp->left;
-				temp->right_two = temp->right;
-				temp2 = temp;
+				if ((var.root)->child > 4) // test
+					(var.temp)->right_two = (var.temp)->right;
 			}
 			else
 			{
-				printf("testotototo\n");
-				while (temp2->right2 != NULL)
-					temp2 = temp2->right2;
-				temp2->right2 = temp;
-				temp2->left_two = temp->left;
-				temp2->right_two = temp->right;
+				var.temp2 = (var.root)->right_next;
+				while ((var.temp2)->right_next != NULL)
+					var.temp2 = (var.temp2)->right_next;
+				(var.temp2)->right_next = var.temp;
+				if (i + 1 != (var.root)->child)
+					(var.temp)->right_two = (var.temp)->right;
 				j++;
 			}
 		}
-		temp = temp->right;
+		else if ((var.root)->child == 1)
+			(var.root)->left = var.temp;
+		var.temp = (var.temp)->right;
 		i++;
 	}
-	temp = root->right2;
+// counting amounts of | ;
+	var.temp = (var.root)->right;
 	i = 0;
 	while ((*split_commands)[i] != NULL)
 	{
@@ -141,17 +147,26 @@ void	create_tree(char ***split_commands)
 			splits++;
 		i++;
 	}
-	printf("%d\n", splits);
+	//tree structure a circular list is made with different commands
+	// with left and right nodes;
+	// right_two is used only for right_next nodes (; or |) and constitutes argument linked to it
+	// only node of right_next type (kinda) has the same proportions but has a left and right lower
+	// leaft and that is root->left
+
+// printing finished tree
+	var.temp = var.root;
+	printf("root->left: %s\n", (var.temp)->left->cmd);
+	if ((var.root)->child > 1)
+		printf("left: %s\n", (var.temp)->left->left_two->cmd);
+	if ((var.root)->child > 2)
+		printf("right: %s\n", (var.temp)->left->right_two->cmd);
 	i = 0;
-	printf("root-> left: %s\n", root->left->cmd);
-	printf("left %s\n", root->left->left_two->cmd);
-	printf("right: %s\n", root->left->right_two->cmd);
-	while (i != splits - 1)
+	while ((var.temp)->right_next != NULL)
 	{
-		printf("root->right: %s\n", temp->cmd);
-		printf("left: %s\n", temp->left_two->cmd);
-		printf("right: %s\n", temp->right_two->cmd);
-		temp = temp->right2;
+		var.temp = (var.temp)->right_next; //right2
+		printf("root->right: %s\n", (var.temp)->cmd);
+		if ((var.temp)->right_two != NULL)
+			printf("right: %s\n", (var.temp)->right_two->cmd);
 		i++;
 	}
 /*
