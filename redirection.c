@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 02:52:18 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 01:13:32 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/25 22:10:39 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ char	**str_split_pipes(char *str)
 		else
 			i++;
 	}
+	printf("i: %d\n", i);
 	split_args[i] = NULL;
 	return (split_args);
 }
