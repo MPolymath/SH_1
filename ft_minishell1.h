@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/22 01:19:59 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/25 01:25:01 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,25 @@
 # include "libft/includes/libft.h"
 # include <unistd.h>
 # include <stdio.h>
+
+typedef struct		s_tree
+{
+	int				child;
+	char			*cmd;
+	struct s_tree	*left;
+	struct s_tree	*left_two;
+	struct s_tree	*right;
+	struct s_tree	*right_next;;
+	struct s_tree	*right_two;
+}					t_tree;
+
+typedef struct		s_ptr
+{
+	t_tree			*root;
+	t_tree			*start_child;
+	t_tree			*temp;
+	t_tree			*temp2;
+}					t_ptr;
 
 typedef struct		s_main
 {
@@ -29,6 +48,8 @@ typedef struct		s_main
 	char			*test_path;
 	char			**paths;
 	char			**split_args;
+	char			**list;
+	t_ptr			var;
 }					t_main;
 
 typedef struct		s_args
@@ -67,25 +88,6 @@ typedef struct		s_var_env
 	char			**new_env;
 	char			*temp;
 }					t_var_env;
-
-typedef struct		s_tree
-{
-	int				child;
-	char			*cmd;
-	struct s_tree	*left;
-	struct s_tree	*left_two;
-	struct s_tree	*right;
-	struct s_tree	*right_next;;
-	struct s_tree	*right_two;
-}					t_tree;
-
-typedef struct		s_ptr
-{
-	t_tree			*root;
-	t_tree			*start_child;
-	t_tree			*temp;
-	t_tree			*temp2;
-}					t_ptr;
 
 void				cpy_env(char **envp, t_main *vars);
 void				exec_others_cmd(t_main **vars);
@@ -142,5 +144,16 @@ void				handle_temp_env(t_main **vars, t_var_env *bod);
 int					exec_temp_command(t_main **vars, t_var_env *bod);
 void				if_temp_command(t_main **vars, t_paths **var, t_var_env *bod);
 int					find_var_env(t_main **vars, char **vars_value);
-void				create_tree(char ***split_command);
+int					check_valid_a(char *full_str);
+int					check_valid_b(char *full_str);
+int					check_valid_c(char *full_str);
+int					check_valid(char *full_str);
+int					count_and_pipe(char *full_str);
+char				**split_pipe_and(char *full_str);
+void				ft_element(char *str, int start, int end);
+int					split_counts(char *str);
+char				**str_split_pipes(char *str);
+t_tree				*ft_new_node(char **command);
+void				create_tree(char ***split_commands, t_ptr *var);
+
 #endif

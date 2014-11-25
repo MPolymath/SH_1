@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/16 17:32:57 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/25 01:21:40 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void		init_main(t_main *vars, int argc, char **argv)
 void		while_funcs(t_main **vars, t_paths **var)
 {
 	ft_split_args(vars);
+	(*vars)->list = split_pipe_and((*vars)->line);
+	create_tree(&((*vars)->list), &((*vars)->var));
 	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
 	else if (ft_strcmp((*vars)->command, "cd") == 0)

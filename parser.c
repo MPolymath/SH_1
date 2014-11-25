@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/17 14:50:17 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/21 02:37:22 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/25 01:10:13 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void		*insert_node()
 {
 }
 */
-
+/*
 int		main(int argc, char **argv)
 {
 	char	**list;
@@ -198,3 +198,4 @@ int		main(int argc, char **argv)
 	else
 		ft_putstr_fd("Erreur\n", 2);
 }
+*/

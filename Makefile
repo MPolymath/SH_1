@@ -6,7 +6,7 @@
 #    By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/04/20 23:02:19 by mdiouf            #+#    #+#              #
-#    Updated: 2014/11/16 20:52:15 by mdiouf           ###   ########.fr        #
+#    Updated: 2014/11/25 01:11:57 by mdiouf           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ SRCS = buildin.c \
 		cd2.c \
 		cd3.c \
 		cd4.c \
+		redirection.c \
+		parser.c \
+		create_tree.c \
 		setenv.c \
 		setenv2.c \
 		setenv3.c \
