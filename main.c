@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 01:21:40 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/25 03:30:08 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ void		init_main(t_main *vars, int argc, char **argv)
 
 void		while_funcs(t_main **vars, t_paths **var)
 {
-	ft_split_args(vars);
-	(*vars)->list = split_pipe_and((*vars)->line);
-	create_tree(&((*vars)->list), &((*vars)->var));
 	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
 	else if (ft_strcmp((*vars)->command, "cd") == 0)
@@ -48,6 +45,24 @@ void		while_funcs(t_main **vars, t_paths **var)
 		execute(vars, var);
 	else
 		ft_fork(vars, var);
+}
+
+void		ft_command(t_main **vars)
+{
+	t_tree	*temp;
+	int		i;
+
+	i = 0;
+	temp = (*vars)->var.root;
+	
+}
+
+void		while_tree(t_main **vars, t_paths **var)
+{
+	while (ft_command(vars) != NULL)
+	{
+		while_funcs(vars, var);
+	}
 }
 
 void		main_body(t_main *vars)
@@ -73,7 +88,7 @@ int			main(int argc, char **argv, char **envp)
 
 	temp = &var;
 	temp2 = &vars;
-	if (envp[0] == NULL)
+x	if (envp[0] == NULL)
 	{
 		ft_putstr_fd("Program cannot run without env\n", 2);
 		return (0);
@@ -85,6 +100,9 @@ int			main(int argc, char **argv, char **envp)
 	{
 		if (vars.line != NULL)
 		{
+			ft_split_args(&temp2);
+			vars.list = split_pipe_and(vars.line);
+			create_tree(&(vars.list), &(vars.var));
 			while_funcs(&temp2, &temp);
 			main_body(&vars);
 		}
