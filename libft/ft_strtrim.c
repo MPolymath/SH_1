@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/29 02:31:34 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/09/28 21:38:25 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 05:00:19 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ char	*ft_strtrim(char const *s)
 
 	newstring = malloc((ft_strlen(s) + 1) * sizeof(char*));
 	if (newstring == NULL || !s)
-	{
 		return (NULL);
-	}
 	newstring = (char*)ft_begin_end_space_delete(s);
 	return (newstring);
 }

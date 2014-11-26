@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 02:41:43 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 05:08:19 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,6 @@ void		while_funcs(t_main **vars, t_paths **var)
 		ft_fork(vars, var);
 }
 
-/*int			ft_command(t_main **vars)
-{
-	t_tree	*temp;
-	int		i;
-
-	i = 0;
-	temp = (*vars)->var.root; // initialise to first command
-	if (temp->left != NULL && (ft_strcmp(temp->left->cmd, "|") == 0 || ft_strcmp(temp->left->cmd, ";") == 0))
-	{
-		if (temp->left->left_two != NULL)
-			temp = temp->left->left_two;
-	}
-	else if (temp->left != NULL)
-		temp = temp->left;
-	(*vars)->cmd_list = str_split_pipes(temp->cmd);
-	printf("TOTO\n");
-	printf("temp->cmd %s\n", temp->cmd);
-	while ((*vars)->cmd_list[i] != NULL)
-	{
-		printf("(*vars)->cmd_list[i] %s\n", (*vars)->cmd_list[i]);
-		i++;
-	}
-	return (0);
-}*/
-
 void		while_tree(t_main **vars, t_paths **var)
 {
 	t_tree	*temp;
@@ -80,10 +55,9 @@ void		while_tree(t_main **vars, t_paths **var)
 	i = 0;
 	temp = (*vars)->var.root; // initialise to first command
 	(*vars)->type = 0;
-	if (ft_strcmp(temp->left->cmd, ";") == 0)
+	if (ft_strcmp(temp->left->cmd, ";") == 0) // ; handling
 	{
 		(*vars)->type = 1;
-//		printf("temp->left %s\n", temp->left->cmd);
 		if (temp->left->left_two != NULL)
 		{
 			temp = temp->left->left_two;
@@ -101,12 +75,25 @@ void		while_tree(t_main **vars, t_paths **var)
 			ft_split_args(vars);
 			(*vars)->cmd_list = str_split_pipes(temp->cmd);
 			while_funcs(vars, var);
-		}
-		else if (temp->left->right_two != NULL)
-		{
-			temp = (*vars)->var.root->left->right_two;
-			(*vars)->cmd_list = str_split_pipes(temp->cmd);
-			while_funcs(vars, var);
+			temp = (*vars)->var.root;
+			if (temp->left->right_two != NULL)
+			{
+				temp = (*vars)->var.root->left->right_two;
+				if((*vars)->line != NULL)
+				{
+					free((*vars)->line);
+					(*vars)->line = NULL;
+					(*vars)->line = temp->cmd;
+				}
+				if((*vars)->split_args != NULL)
+				{
+					free((*vars)->split_args);
+					(*vars)->split_args = NULL;
+				}
+				ft_split_args(vars);
+				(*vars)->cmd_list = str_split_pipes(temp->cmd);
+				while_funcs(vars, var);
+			}
 		}
 	}
 	else if (ft_strcmp(temp->left->cmd, "|") == 0)
@@ -118,16 +105,18 @@ void		while_tree(t_main **vars, t_paths **var)
 			temp = temp->left->left_two;
 	}
 	else if (temp->left != NULL)
+	{
 		temp = temp->left;
-	printf("TOTO\n");
-	printf("temp->cmd %s\n", temp->cmd);
+		(*vars)->cmd_list = str_split_pipes(temp->cmd);
+		while_funcs(vars, var);
+	}
+//	printf("TOTO\n");
+//	printf("temp->cmd %s\n", temp->cmd);
 	while ((*vars)->cmd_list[i] != NULL)
 	{
 		printf("(*vars)->cmd_list[i] %s\n", (*vars)->cmd_list[i]);
 		i++;
 	}
-	(*vars)->cmd_list = str_split_pipes(temp->cmd);
-	while_funcs(vars, var);
 //	while (temp != NULL)
 //	{
 //		while_funcs(vars, var);

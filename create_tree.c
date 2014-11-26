@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 19:03:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 01:20:07 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 04:39:38 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	create_tree(char ***split_commands, t_ptr *var)
 	int	i;
 	int	j;
 	int	splits;
-//	t_ptr	var;
 
 // circular list creation
 	i = 0;

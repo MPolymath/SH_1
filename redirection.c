@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 02:52:18 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 00:06:27 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 05:06:09 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_element(char *str, int start, int end)
 
 	if (start == end)
 		return (NULL);
-	new_string = (char*)malloc(sizeof(char) * (end - start));
+	new_string = (char*)malloc(sizeof(char) * (end - start + 1));
 	i = 0;
 	while (start != (end))
 	{
@@ -28,8 +28,7 @@ char	*ft_element(char *str, int start, int end)
 		i++;
 	}
 	new_string[i] = '\0';
-	ft_strtrim(new_string);
-	printf("new_string: %s\n", new_string);
+	new_string = ft_strtrim(new_string);
 	return (new_string);
 }
 
@@ -76,7 +75,7 @@ char	**str_split_pipes(char *str)
 	start = 0;
 	count = 0;
 	count = split_counts(str);
-	printf("count: %d\n", count);
+//	printf("count: %d\n", count);
 	split_args =  (char**)malloc(sizeof(char*) * (count + 1));
 	while (str[i] != '\0')
 	{
@@ -127,8 +126,7 @@ char	**str_split_pipes(char *str)
 		else
 			i++;
 	}
-	printf("split_args[count]: %s\n", split_args[count]);
-	printf("split_args[count - 1] : %s\n", split_args[count - 1]);
+//	printf("split_args[count - 1] : %s\n", split_args[count - 1]);
 	split_args[count] = NULL;
 	return (split_args);
 }
