@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 21:59:51 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 01:01:11 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct		s_main
 	int				fd;
 	int				args_nbr;
 	int				i;
+	int				type;
 	char			**env;
 	char			**temp_env;
 	char			*line;
@@ -151,7 +152,7 @@ int					check_valid_c(char *full_str);
 int					check_valid(char *full_str);
 int					count_and_pipe(char *full_str);
 char				**split_pipe_and(char *full_str);
-void				ft_element(char *str, int start, int end);
+char				*ft_element(char *str, int start, int end);
 int					split_counts(char *str);
 char				**str_split_pipes(char *str);
 t_tree				*ft_new_node(char **command);

@@ -6,19 +6,19 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 02:52:18 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 22:10:39 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/26 00:06:27 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
-void	ft_element(char *str, int start, int end)
+char	*ft_element(char *str, int start, int end)
 {
 	char	*new_string;
 	int		i;
 
 	if (start == end)
-		return ;
+		return (NULL);
 	new_string = (char*)malloc(sizeof(char) * (end - start));
 	i = 0;
 	while (start != (end))
@@ -30,6 +30,7 @@ void	ft_element(char *str, int start, int end)
 	new_string[i] = '\0';
 	ft_strtrim(new_string);
 	printf("new_string: %s\n", new_string);
+	return (new_string);
 }
 
 int		split_counts(char *str)
@@ -65,11 +66,13 @@ int		split_counts(char *str)
 char	**str_split_pipes(char *str)
 {
 	int		i;
+	int		j;
 	int		start;
 	int		count;
 	char	**split_args;
 
 	i = 0;
+	j = 0;
 	start = 0;
 	count = 0;
 	count = split_counts(str);
@@ -79,44 +82,54 @@ char	**str_split_pipes(char *str)
 	{
 		if ((str[i] == '>' && str[i + 1] == '>') && i != 0)
 		{
-			ft_element(str, start, i);
-			ft_element(str, i, i + 2);
+			split_args[j] = ft_element(str, start, i);
+			j++;
+			split_args[j] =ft_element(str, i, i + 2);
+			j++;
 			i++;
 			i++;
 			start = i;
 		}
 		else if ((str[i] == '<' && str[i + 1] == '<') && i != 0)
 		{
-			ft_element(str, start, i);
-			ft_element(str, i, i + 2);
+			split_args[j] = ft_element(str, start, i);
+			j++;
+			split_args[j] = ft_element(str, i, i + 2);
+			j++;
 			i++;
 			i++;
 			start = i;
 		}
 		else if ((str[i] == '>') && i != 0)
 		{
-			ft_element(str, start, i);
-			ft_element(str, i, i + 1);
+			split_args[j] = ft_element(str, start, i);
+			j++;
+			split_args[j] = ft_element(str, i, i + 1);
+			j++;
 			i++;
 			start = i;
 		}
 		else if ((str[i] == '<') && i != 0)
 		{
-			ft_element(str, start, i);
-			ft_element(str, i, i + 1);
+			split_args[j] = ft_element(str, start, i);
+			j++;
+			split_args[j] = ft_element(str, i, i + 1);
+			j++;
 			i++;
 			start = i;
 		}
 		else if ((str[i + 1] == '\0') && i != 0)
 		{
 			i++;
-			ft_element(str, start, i);
+			split_args[j] = ft_element(str, start, i);
+			j++;
 		}
 		else
 			i++;
 	}
-	printf("i: %d\n", i);
-	split_args[i] = NULL;
+	printf("split_args[count]: %s\n", split_args[count]);
+	printf("split_args[count - 1] : %s\n", split_args[count - 1]);
+	split_args[count] = NULL;
 	return (split_args);
 }
 /*
