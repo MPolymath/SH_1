@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 01:01:11 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/30 01:39:12 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct		s_main
 	int				args_nbr;
 	int				i;
 	int				type;
+	int				pipe_fd[2];
+	int				pipe_fd2[2];
 	char			**env;
 	char			**temp_env;
 	char			*line;

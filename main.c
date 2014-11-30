@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 05:08:19 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/30 02:02:31 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void		while_tree(t_main **vars, t_paths **var)
 	int		i;
 
 	i = 0;
+	(*vars)->pipe_fd[0] = -1;
+	(*vars)->pipe_fd[1] = -1;
 	temp = (*vars)->var.root; // initialise to first command
 	(*vars)->type = 0;
 	if (ft_strcmp(temp->left->cmd, ";") == 0) // ; handling
@@ -98,6 +100,45 @@ void		while_tree(t_main **vars, t_paths **var)
 	}
 	else if (ft_strcmp(temp->left->cmd, "|") == 0)
 	{
+		(*vars)->type = 2;
+		if (temp->left->left_two != NULL)
+		{
+			temp = temp->left->left_two;
+			if((*vars)->line != NULL)
+			{
+				free((*vars)->line);
+				(*vars)->line = NULL;
+				(*vars)->line = temp->cmd;
+			}
+			if((*vars)->split_args != NULL)
+			{
+				free((*vars)->split_args);
+				(*vars)->split_args = NULL;
+			}
+			ft_split_args(vars);
+			(*vars)->cmd_list = str_split_pipes(temp->cmd);
+			while_funcs(vars, var);
+			temp = (*vars)->var.root;
+			(*vars)->type = 3;
+			if (temp->left->right_two != NULL)
+			{
+				temp = (*vars)->var.root->left->right_two;
+				if((*vars)->line != NULL)
+				{
+					free((*vars)->line);
+					(*vars)->line = NULL;
+					(*vars)->line = temp->cmd;
+				}
+				if((*vars)->split_args != NULL)
+				{
+					free((*vars)->split_args);
+					(*vars)->split_args = NULL;
+				}
+				ft_split_args(vars);
+				(*vars)->cmd_list = str_split_pipes(temp->cmd);
+				while_funcs(vars, var);
+			}
+		}
 	}
 	else if (temp->left != NULL && (ft_strcmp(temp->left->cmd, "|") == 0 || ft_strcmp(temp->left->cmd, ";") == 0))
 	{

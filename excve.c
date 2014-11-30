@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/15 19:32:27 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/11/30 00:47:59 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void		exec_others_cmd(t_main **vars)
 				}
 				(*vars)->test_path =
 							ft_strjoin((*vars)->paths[i], (*vars)->command);
+				printf("test_path: %s\n", (*vars)->test_path);
 				execve((*vars)->test_path, (*vars)->split_args, (*vars)->env);
 				i++;
 			}
