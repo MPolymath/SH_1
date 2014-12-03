@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/30 01:39:12 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/03 19:46:47 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,17 @@ typedef struct		s_main
 	int				i;
 	int				type;
 	int				pipe_fd[2];
-	int				pipe_fd2[2];
 	char			**env;
 	char			**temp_env;
 	char			*line;
+	char			*line2;
 	char			*tmp;
 	char			*command;
+	char			*command2;
 	char			*test_path;
 	char			**paths;
 	char			**split_args;
+	char			**split_args2;
 	char			**list;
 	char			**cmd_list;
 	t_ptr			var;

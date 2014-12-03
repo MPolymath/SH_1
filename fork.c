@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/30 02:40:34 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/03 19:34:47 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,19 @@ void	ft_fork(t_main **vars, t_paths **var)
 	else if (pid > 0)
 	{
 		wait(NULL);
+		if ((*vars)->type == 2)
+		{
+			dup2(fd[0], 0);
+			close(fd[1]);
+			pid = fork();
+			if ((pid == 0)
+				execute(vars, var);
+			else if (pid != 0)
+			{
+				wait(NULL);
+				(*vars)->type = 0;
+			}
+		}
 		if ((*vars)->temp_env != NULL)
 		{
 			if ((*vars)->env != NULL)

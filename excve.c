@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/30 00:47:59 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/03 19:34:21 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ void		exec_others_cmd(t_main **vars)
 
 void		execute(t_main **vars, t_paths **var)
 {
+	if ((*vars)->type == 2)
+	{
+		dup2(fd[1], 1);
+		close(fd[0]);
+	}
 	if (ft_strcmp((*vars)->command, "cd") == 0)
 		cd_cmd(vars, var);
 	else if (ft_strcmp((*vars)->command, "setenv") == 0)
