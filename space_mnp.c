@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 21:00:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 04:36:48 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/04 19:09:31 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,25 @@ int		test_space_tab(char *str, int i)
 	if (str[i] == ' ' || str[i] == '\t')
 		return (1);
 	return (0);
+}
+
+void	ft_split_to_space2(t_main **vars, int *start, int *size)
+{
+	*size = *start;
+	while (test_space_tab((*vars)->line2, *size) == 0 &&
+							(*vars)->line2[*size] != '\0')
+		(*size)++;
+	(*vars)->tmp2 = (char*)malloc(sizeof(char) * ((*size) - (*start) + 1));
+	*size = *size + *start;
+	while (*start != *size)
+	{
+		(*vars)->tmp2[*start] = (*vars)->line2[*start];
+		(*start)++;
+	}
+	(*vars)->tmp2[*start] = '\0';
+	if (test_space_tab((*vars)->line2, *start))
+		while (test_space_tab((*vars)->line2, *start))
+			(*start)++;
 }
 
 void	ft_split_to_space(t_main **vars, int *start, int *size)
@@ -36,6 +55,30 @@ void	ft_split_to_space(t_main **vars, int *start, int *size)
 	if (test_space_tab((*vars)->line, *start))
 		while (test_space_tab((*vars)->line, *start))
 			(*start)++;
+}
+
+int		count_args2(t_main **vars, int start)
+{
+	int	args_nbr;
+
+	args_nbr = 0;
+	if ((*vars)->line2[start] == '\0')
+		return (0);
+	while (1)
+	{
+		if (test_space_tab((*vars)->line2, start) == 1 ||
+							(*vars)->line2[start] == '\0')
+		{
+			args_nbr++;
+			while (test_space_tab((*vars)->line2, start) == 1)
+				start++;
+			if ((*vars)->line2[start] == '\0')
+				break ;
+		}
+		else
+			start++;
+	}
+	return (args_nbr);
 }
 
 int		count_args(t_main **vars, int start)

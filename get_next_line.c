@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/27 21:55:05 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/01 14:26:41 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/04 19:42:03 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/uio.h>
 #include "libft/includes/libft.h"
 #include "get_next_line.h"
+#include <stdio.h>
 
 int				ft_freejoin(char **line, char *str)
 {
@@ -75,5 +76,6 @@ int				get_next_line(int const fd, char **line)
 		if (ft_freejoin(line, buff) == -1)
 			return (-1);
 	}
+	printf("rd: %d\n", rd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/03 19:46:47 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/04 19:48:13 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ typedef struct		s_main
 	int				i;
 	int				type;
 	int				pipe_fd[2];
+	int				zero_backup;
+	int				one_backup;
 	char			**env;
 	char			**temp_env;
 	char			*line;
 	char			*line2;
 	char			*tmp;
+	char			*tmp2;
 	char			*command;
 	char			*command2;
 	char			*test_path;
@@ -55,6 +58,7 @@ typedef struct		s_main
 	char			**split_args2;
 	char			**list;
 	char			**cmd_list;
+	char			**cmd_list2;
 	t_ptr			var;
 }					t_main;
 
@@ -105,12 +109,15 @@ void				unsetenv_cmd(t_main **vars);
 void				env_cmd(t_main **vars, t_paths **var);
 int					test_space_tab(char *str, int i);
 void				ft_split_to_space(t_main **vars, int *start, int *size);
+void				ft_split_to_space2(t_main **vars, int *start, int *size);
 int					count_args(t_main **vars, int start);
 void				get_size_str(t_main **vars, int i, int *size);
 void				fill_malloc_char(t_main **vars, int **start, int *i, int *j);
 void				init_var(t_args *var);
 void				args_cpy(t_main **vars, int *start);
+void				args_cpy2(t_main **vars, int *start);
 void				ft_split_args(t_main **vars);
+void				ft_split_args2(t_main **vars);
 int					test_for_path(char *str);
 void				cpy_path(char **cpy_path, char **env);
 void				rmv_path(char **path);

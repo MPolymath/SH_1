@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/03 19:34:21 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/04 18:13:19 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void		execute(t_main **vars, t_paths **var)
 {
 	if ((*vars)->type == 2)
 	{
-		dup2(fd[1], 1);
-		close(fd[0]);
+		dup2(((*vars)->pipe_fd)[1], 1);
+		close(((*vars)->pipe_fd)[0]);
 	}
 	if (ft_strcmp((*vars)->command, "cd") == 0)
 		cd_cmd(vars, var);
