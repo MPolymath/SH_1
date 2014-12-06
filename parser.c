@@ -6,15 +6,15 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/17 14:50:17 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/25 01:10:13 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/06 19:56:07 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_minishell1.h"
 
-int		check_valid_a(char *full_str)
+int				check_valid_a(char *full_str)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	while (full_str[i] != '\0')
@@ -33,9 +33,9 @@ int		check_valid_a(char *full_str)
 	return (0);
 }
 
-int		check_valid_b(char *full_str)
+int				check_valid_b(char *full_str)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	while (full_str[i] != '\0')
@@ -55,9 +55,33 @@ int		check_valid_b(char *full_str)
 	return (0);
 }
 
-int		check_valid_c(char *full_str)
+int				check_error(char *full_str, int i)
 {
-	int		i;
+	if ((full_str[i] == '>' && full_str[i + 1] == '>' &&
+		full_str[i + 2] == '>') ||
+		(full_str[i] == '>' && full_str[i + 1] == '>' &&
+		full_str[i + 2] == '<') ||
+		(full_str[i] == '>' && full_str[i + 1] == '>' &&
+		full_str[i + 2] == '|') ||
+		(full_str[i] == '>' && full_str[i + 1] == '>' &&
+		full_str[i + 2] == ';') ||
+		(full_str[i] == '<' && full_str[i + 1] == '<' &&
+		full_str[i + 2] == '<') ||
+		(full_str[i] == '<' && full_str[i + 1] == '<' &&
+		full_str[i + 2] == '<') ||
+		(full_str[i] == '<' && full_str[i + 1] == '<' &&
+		full_str[i + 2] == '|') ||
+		(full_str[i] == '<' && full_str[i + 1] == '<' &&
+		full_str[i + 2] == ';'))
+	{
+		ft_putstr_fd("Erreur , Invalid string\n", 2);
+		return (-1);
+	}
+	return (0);
+}
+int				check_valid_c(char *full_str)
+{
+	int			i;
 
 	i = 0;
 	while (full_str[i] != '\0')
@@ -65,35 +89,28 @@ int		check_valid_c(char *full_str)
 		if (full_str[i] == '>' || full_str[i] == '<')
 		{
 			if (full_str[i + 1] != '\0')
-				if ((full_str[i] == '>' && full_str[i + 1] == '>' && full_str[i + 2] == '>') ||
-					(full_str[i] == '>' && full_str[i + 1] == '>' && full_str[i + 2] == '<') ||
-					(full_str[i] == '>' && full_str[i + 1] == '>' && full_str[i + 2] == '|') ||
-					(full_str[i] == '>' && full_str[i + 1] == '>' && full_str[i + 2] == ';') ||
-					(full_str[i] == '<' && full_str[i + 1] == '<' && full_str[i + 2] == '<') ||
-					(full_str[i] == '<' && full_str[i + 1] == '<' && full_str[i + 2] == '<') ||
-					(full_str[i] == '<' && full_str[i + 1] == '<' && full_str[i + 2] == '|') ||
-					(full_str[i] == '<' && full_str[i + 1] == '<' && full_str[i + 2] == ';'))
-				{
-					ft_putstr_fd("Erreur , Invalid string\n", 2);
+			{
+				if (check_error(full_str, i) == -1)
 					return (1);
-				}
+			}
 		}
 		i++;
 	}
 	return (0);
 }
 
-int		check_valid(char *full_str)
+int				check_valid(char *full_str)
 {
-	if (check_valid_a(full_str) == 1 || check_valid_b(full_str) == 1 || check_valid_c(full_str) == 1)
+	if (check_valid_a(full_str) == 1 || check_valid_b(full_str) == 1 ||
+		check_valid_c(full_str) == 1)
 		return (0);
 	return (1);
 }
 
-int			count_and_pipe(char	*full_str)
+int				count_and_pipe(char	*full_str)
 {
-	int		i;
-	int		cnt;
+	int			i;
+	int			cnt;
 
 	i = 0;
 	cnt = 0;
@@ -104,7 +121,8 @@ int			count_and_pipe(char	*full_str)
 		if (full_str[i] == ';' || full_str[i] == '|')
 			cnt = cnt + 2;
 		i++;
-		if (full_str[i] == '\0' && (full_str[i - 1] != ';' && full_str[i - 1] != '|'))
+		if (full_str[i] == '\0' && (full_str[i - 1] != ';' &&
+			full_str[i - 1] != '|'))
 			cnt = cnt + 1;
 	}
 	if (full_str[i] != '\0')
@@ -112,6 +130,74 @@ int			count_and_pipe(char	*full_str)
 	return (cnt);
 }
 
+/*int		if_splits(char ***split_str, int i,)
+{
+
+}*/
+
+
+char 		**split_pipe_and(char *full_str)
+{
+//	int		i;
+//	int		j;
+//	int		splits;
+//	int		start;
+//	char	**split_str;
+	t_splt	vars;
+
+	vars.i = 0;
+	vars.j = 0;
+	vars.start = 0;
+	vars.splits = count_and_pipe(full_str);
+	if (vars.splits == -1)
+	{
+		exit(0);
+		return (NULL);
+	}
+	vars.split_str = (char**)malloc(sizeof(char*) * ((vars.splits) + 1));
+	while (full_str[vars.i] != '\0')
+	{
+		if (full_str[vars.i] == ';' || full_str[vars.i] == '|')
+		{
+			(vars.split_str)[vars.j] = ft_strsub(full_str, vars.start, (vars.i) - (vars.start));
+			(vars.split_str)[vars.j] = ft_strtrim((vars.split_str)[(vars.j)]);
+			if ((vars.split_str)[(vars.j)][0] == '\0')
+			{
+				free((vars.split_str)[vars.j]);
+				ft_putstr_fd("Invalid chain\n", 2);
+				return (NULL);
+			}
+			vars.start = (vars.i) + 1;
+			(vars.j)++;
+			(vars.split_str)[vars.j] = (char*)malloc(sizeof(char) * 2);
+			(vars.split_str)[vars.j][0] = full_str[vars.i];
+			(vars.split_str)[vars.j][1] = '\0';
+			(vars.j)++;
+		}
+		else if (full_str[(vars.i) + 1] == '\0' && (full_str[(vars.i)] != ';' && full_str[(vars.i)] != '|'))
+		{
+			(vars.split_str)[vars.j] = ft_strsub(full_str, vars.start, (vars.i) - (vars.start) + 1);
+			(vars.split_str)[vars.j] = ft_strtrim((vars.split_str)[vars.j]);
+			if ((vars.split_str)[vars.j][0] == '\0')
+			{
+				free((vars.split_str)[vars.j]);
+				(vars.split_str)[vars.j] = NULL;
+			}
+			(vars.j)++;
+		}
+		(vars.i)++;
+	}
+	(vars.split_str)[vars.j] = NULL;
+	(vars.i) = 0;
+	while ((vars.split_str)[vars.i] != NULL)
+	{
+		printf("split_str[%d] %s\n", vars.i, (vars.split_str)[vars.i]);
+		(vars.i)++;
+	}
+	return ((vars.split_str));
+}
+
+/*
 char 		**split_pipe_and(char *full_str)
 {
 	int		i;
@@ -125,7 +211,10 @@ char 		**split_pipe_and(char *full_str)
 	start = 0;
 	splits = count_and_pipe(full_str);
 	if (splits == -1)
+	{
+		exit (0);
 		return (NULL);
+	}
 	split_str = (char**)malloc(sizeof(char*) * (splits + 1));
 	while (full_str[i] != '\0')
 	{
@@ -167,35 +256,5 @@ char 		**split_pipe_and(char *full_str)
 		i++;
 	}
 	return (split_str);
-}
-
-/*
-char		*create_node(char *str)
-{
-}
-
-void		*insert_node()
-{
-}
-*/
-/*
-int		main(int argc, char **argv)
-{
-	char	**list;
-	int		i;
-
-	i = 0;
-	if (argc == 2)
-	{
-		list = split_pipe_and(argv[1]);
-		while (list[i] != NULL)
-		{
-			printf("%s\n", list[i]);
-			i++;
-		}
-		create_tree(&list);
-	}
-	else
-		ft_putstr_fd("Erreur\n", 2);
 }
 */

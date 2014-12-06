@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/04 19:48:13 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/06 19:53:33 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,15 @@ typedef struct		s_main
 	char			**cmd_list2;
 	t_ptr			var;
 }					t_main;
+
+typedef struct		s_splt
+{
+	int				i;
+	int				j;
+	int				splits;
+	int				start;
+	char			**split_str;
+}					t_splt;
 
 typedef struct		s_args
 {
