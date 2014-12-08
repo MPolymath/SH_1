@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/06 19:53:33 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/08 21:19:11 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,23 @@ typedef struct		s_var_env
 	char			**new_env;
 	char			*temp;
 }					t_var_env;
+
+typedef struct		s_mn
+{
+	t_main			vars;
+	t_main			*temp2;
+	t_paths			var;
+	t_paths			*temp;
+}					t_mn;
+
+typedef struct		s_splt_var
+{
+	int				i;
+	int				j;
+	int				start;
+	int				count;
+	char			**split_args;
+}					t_splt_var;
 
 void				cpy_env(char **envp, t_main *vars);
 void				exec_others_cmd(t_main **vars);

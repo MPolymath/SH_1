@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 19:03:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/06 19:33:08 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/08 20:20:10 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,13 @@ void		bin_tree_body(t_ptr **var, int **j, int i)
 void		count_splits(char ***split_commands, int *splits, t_ptr **var)
 {
 	int		i;
+
 	(*var)->temp = ((*var)->root)->right; // counting amounts of | ;
 	i = 0;
 	while ((*split_commands)[i] != NULL)
 	{
-		if (ft_strcmp((*split_commands)[i], ";") == 0 || ft_strcmp((*split_commands)[i], "|") == 0)
+		if (ft_strcmp((*split_commands)[i], ";") == 0 ||
+			ft_strcmp((*split_commands)[i], "|") == 0)
 			(*splits)++;
 		i++;
 	}
@@ -145,6 +147,7 @@ void		print_tree(t_ptr **var)
 		i++;
 	}
 }
+
 void		mk_bin_tree(t_ptr **var, int *j, int *i)
 {
 	(*var)->temp = (*var)->start_child; // binary tree creation
@@ -153,7 +156,9 @@ void		mk_bin_tree(t_ptr **var, int *j, int *i)
 	*j = 0;
 	while (*i != ((*var)->root)->child)
 	{
-		if (((*var)->temp)->cmd != NULL && (ft_strcmp(((*var)->temp)->cmd, ";") == 0 || ft_strcmp(((*var)->temp)->cmd, "|") == 0))
+		if (((*var)->temp)->cmd != NULL &&
+			(ft_strcmp(((*var)->temp)->cmd, ";") == 0 ||
+			ft_strcmp(((*var)->temp)->cmd, "|") == 0))
 			bin_tree_body(var, &j, *i);
 		else if (((*var)->root)->child == 1)
 			((*var)->root)->left = (*var)->temp;
@@ -164,13 +169,11 @@ void		mk_bin_tree(t_ptr **var, int *j, int *i)
 
 int			tree_error(char ***split_commands, int i, t_ptr **var)
 {
-//	if (*split_commands != NULL)
-//	{
-		if ((*split_commands)[i] == NULL)
-			return (-1);
-//	}
-//	else
-//		return (-1);
+	if ((*split_commands)[i] == NULL)
+	{
+		exit(0);
+		return (-1);
+	}
 	if (((*var)->root = ft_new_node(NULL)) == NULL)
 	{
 		ft_putstr_fd("Malloc returned NULL\n", 2);
@@ -205,4 +208,3 @@ void		create_tree(char ***split_commands, t_ptr *var)
 	count_splits(split_commands, &splits, &var);
 	print_tree(&var);
 }
-

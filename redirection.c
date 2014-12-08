@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/23 02:52:18 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/11/26 05:06:09 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/08 20:53:32 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,18 @@ char	*ft_element(char *str, int start, int end)
 	return (new_string);
 }
 
+void	init_splt_counts(int *i, int *cnt)
+{
+	*i = 0;
+	*cnt = 0;
+}
+
 int		split_counts(char *str)
 {
 	int	i;
 	int	cnt;
 
-	i = 0;
-	cnt = 0;
+	init_splt_counts(&i, &cnt);
 	while (str[i] != '\0')
 	{
 		if ((str[i] == '>' && str[i + 1] == '>'))
@@ -62,85 +67,59 @@ int		split_counts(char *str)
 	return (cnt);
 }
 
-char	**str_split_pipes(char *str)
+void	case1(t_splt_var *var, char *str)
 {
-	int		i;
-	int		j;
-	int		start;
-	int		count;
-	char	**split_args;
-
-	i = 0;
-	j = 0;
-	start = 0;
-	count = 0;
-	count = split_counts(str);
-//	printf("count: %d\n", count);
-	split_args =  (char**)malloc(sizeof(char*) * (count + 1));
-	while (str[i] != '\0')
-	{
-		if ((str[i] == '>' && str[i + 1] == '>') && i != 0)
-		{
-			split_args[j] = ft_element(str, start, i);
-			j++;
-			split_args[j] =ft_element(str, i, i + 2);
-			j++;
-			i++;
-			i++;
-			start = i;
-		}
-		else if ((str[i] == '<' && str[i + 1] == '<') && i != 0)
-		{
-			split_args[j] = ft_element(str, start, i);
-			j++;
-			split_args[j] = ft_element(str, i, i + 2);
-			j++;
-			i++;
-			i++;
-			start = i;
-		}
-		else if ((str[i] == '>') && i != 0)
-		{
-			split_args[j] = ft_element(str, start, i);
-			j++;
-			split_args[j] = ft_element(str, i, i + 1);
-			j++;
-			i++;
-			start = i;
-		}
-		else if ((str[i] == '<') && i != 0)
-		{
-			split_args[j] = ft_element(str, start, i);
-			j++;
-			split_args[j] = ft_element(str, i, i + 1);
-			j++;
-			i++;
-			start = i;
-		}
-		else if ((str[i + 1] == '\0') && i != 0)
-		{
-			i++;
-			split_args[j] = ft_element(str, start, i);
-			j++;
-		}
-		else
-			i++;
-	}
-//	printf("split_args[count - 1] : %s\n", split_args[count - 1]);
-	split_args[count] = NULL;
-	return (split_args);
+	(var->split_args)[var->j] = ft_element(str, var->start, var->i);
+	(var->j)++;
+	(var->split_args)[var->j] = ft_element(str, var->i, var->i + 1);
+	(var->j)++;
+	(var->i)++;
+	var->start = var->i;
 }
-/*
-int		main(int argc,	char **argv)
-{
-	char	**str;
-	int		i;
 
-	i = 0;
-	str = str_split_pipes(argv[1]);
-	while (str[i] != NULL)
+void	case2(t_splt_var *var, char *str)
+{
+	(var->split_args)[var->j] = ft_element(str, var->start, var->i);
+	(var->j)++;
+	(var->split_args)[var->j] = ft_element(str, var->i, var->i + 2);
+	(var->j)++;
+	(var->i)++;
+	(var->i)++;
+	var->start = var->i;
+}
+
+void	case3(t_splt_var *var, char *str)
+{
+	(var->i)++;
+	(var->split_args)[var->j] = ft_element(str, var->start, var->i);
+	(var->j)++;
+}
+
+char		**str_split_pipes(char *str)
+{
+	t_splt_var	var;
+
+	var.i = 0;
+	var.j = 0;
+	var.start = 0;
+	var.count = 0;
+	var.count = split_counts(str);
+	var.split_args = (char**)malloc(sizeof(char*) * (var.count + 1));
+	while ((str)[var.i] != '\0')
 	{
-		printf("str[i] %s\n", str[i]);
-		i++;
+		if (((str)[var.i] == '>' && (str)[var.i + 1] == '>') && var.i != 0)
+			case2(&var, str);
+		else if (((str)[var.i] == '<' && (str)[var.i + 1] == '<') && var.i != 0)
+			case2(&var, str);
+		else if (((str)[var.i] == '>') && var.i != 0)
+			case1(&var, str);
+		else if (((str)[var.i] == '<') && var.i != 0)
+			case1(&var, str);
+		else if (((str)[var.i + 1] == '\0') && var.i != 0)
+			case3(&var, str);
+		else
+			(var.i)++;
 	}
-}*/
+	(var.split_args)[var.count] = NULL;
+	return (var.split_args);
+}
