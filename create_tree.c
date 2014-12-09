@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 19:03:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/08 20:20:10 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/09 16:59:43 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ void		print_tree(t_ptr **var)
 
 	i = 0;
 	(*var)->temp = (*var)->root; // printing finished tree
+	printf("root->child: %d\n", ((*var)->temp)->child);
 	printf("root->left: %s\n", ((*var)->temp)->left->cmd);
 	if (((*var)->root)->child > 1)
 		printf("left: %s\n", ((*var)->temp)->left->left_two->cmd);

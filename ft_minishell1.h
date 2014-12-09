@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/08 21:19:11 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/09 16:47:19 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct		s_main
 	char			**list;
 	char			**cmd_list;
 	char			**cmd_list2;
+	t_tree			*temp;
 	t_ptr			var;
 }					t_main;
 
