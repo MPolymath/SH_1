@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/18 19:03:37 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/09 16:59:43 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 12:39:17 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ void		circular_list_print(t_ptr **var)
 	int		i;
 
 	i = 0;
-	printf("root child %d\n", ((*var)->root)->child); // circular list printing
+//	printf("root child %d\n", ((*var)->root)->child); // circular list printing
 	(*var)->temp = (*var)->start_child;
 	i = 0;
 	while (i != ((*var)->root)->child)
 	{
-		printf("temp->cmd: %s\n", ((*var)->temp)->cmd);
+//		printf("temp->cmd: %s\n", ((*var)->temp)->cmd);
 		(*var)->temp = ((*var)->temp)->right;
 		i++;
 	}
@@ -132,19 +132,19 @@ void		print_tree(t_ptr **var)
 
 	i = 0;
 	(*var)->temp = (*var)->root; // printing finished tree
-	printf("root->child: %d\n", ((*var)->temp)->child);
-	printf("root->left: %s\n", ((*var)->temp)->left->cmd);
-	if (((*var)->root)->child > 1)
-		printf("left: %s\n", ((*var)->temp)->left->left_two->cmd);
-	if (((*var)->root)->child > 2)
-		printf("right: %s\n", ((*var)->temp)->left->right_two->cmd);
+//	printf("root->child: %d\n", ((*var)->temp)->child);
+//	printf("root->left: %s\n", ((*var)->temp)->left->cmd);
+//	if (((*var)->root)->child > 1)
+//		printf("left: %s\n", ((*var)->temp)->left->left_two->cmd);
+//	if (((*var)->root)->child > 2)
+//		printf("right: %s\n", ((*var)->temp)->left->right_two->cmd);
 	i = 0;
 	while (((*var)->temp)->right_next != NULL)
 	{
 		(*var)->temp = ((*var)->temp)->right_next;
-		printf("root->right: %s\n", ((*var)->temp)->cmd);
-		if (((*var)->temp)->right_two != NULL)
-			printf("right: %s\n", ((*var)->temp)->right_two->cmd);
+//		printf("root->right: %s\n", ((*var)->temp)->cmd);
+//		if (((*var)->temp)->right_two != NULL)
+//			printf("right: %s\n", ((*var)->temp)->right_two->cmd);
 		i++;
 	}
 }
@@ -202,7 +202,7 @@ void		create_tree(char ***split_commands, t_ptr *var)
 		else
 			fill_tree(split_commands, &var, &j, i);
 		i++;
-		printf("i: %d\n", i);
+//		printf("i: %d\n", i);
 	}
 	circular_list_print(&var);
 	mk_bin_tree(&var, &j, &i);

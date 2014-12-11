@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/17 14:50:17 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/08 22:33:33 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 12:39:56 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void	print_split(t_splt *vars)
 	(vars->i) = 0;
 	while ((vars->split_str)[vars->i] != NULL)
 	{
-		printf("split_str[%d] %s\n", vars->i, (vars->split_str)[vars->i]);
+//		printf("split_str[%d] %s\n", vars->i, (vars->split_str)[vars->i]);
 		(vars->i)++;
 	}
 }

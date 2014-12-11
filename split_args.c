@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 18:47:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/04 19:17:17 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 12:41:34 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	ft_split_args2(t_main **vars)
 	(*vars)->tmp2 = NULL;
 	(*vars)->split_args2 = NULL;
 	ft_split_to_space2(vars, &start, &size);
-	printf("tmp2: %s\n", (*vars)->tmp2);
+//	printf("tmp2: %s\n", (*vars)->tmp2);
 	(*vars)->command2 = ft_strdup((*vars)->tmp2);
 	(*vars)->args_nbr = count_args(vars, start);
 	start = 0;

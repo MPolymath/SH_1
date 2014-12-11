@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/09 19:55:29 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 16:34:47 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void		init_main(t_main *vars, int argc, char **argv)
 	vars->fd = 0;
 	vars->args_nbr = 0;
 	vars->i = 0;
+	vars->next_pipe = 0;
 	vars->env = NULL;
 	vars->temp_env = NULL;
 	vars->line = NULL;
@@ -31,6 +32,7 @@ void		init_main(t_main *vars, int argc, char **argv)
 	vars->cmd_list = NULL;
 	vars->cmd_list2 = NULL;
 	vars->command = NULL;
+	vars->command2 = NULL;
 	vars->test_path = NULL;
 	vars->paths = NULL;
 	vars->split_args = NULL;
@@ -44,6 +46,7 @@ void		ft_next(t_main **vars)
 {
 	t_tree	*temp2;
 
+	printf("ft_next\n");
 	temp2 = NULL;
 	if ((*vars)->var.root->child == 1)
 	{
@@ -63,40 +66,60 @@ void		ft_next(t_main **vars)
 	else if ((*vars)->var.root->child > 3)
 	{
 		temp2 = (*vars)->var.root->right_next;
+		if ((*vars)->temp == (*vars)->var.root->left->right_two && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
+		{
+			if (ft_strcmp(temp2->cmd, "|") == 0)
+				(*vars)->next_pipe = 1;
+			(*vars)->temp = temp2->right_two;
+			return ;
+		}
+
+//		printf("temp2->cmd: %s\n", temp2->cmd);
+//		printf("temp2->right_two->cmd %s\n", temp2->right_two->cmd);
+		if (ft_strcmp(temp2->cmd, "|") != 0 && ft_strcmp(temp2->cmd, ";") != 0)
+		{
+			(*vars)->temp = temp2;
+			return ;
+		}
 		while (temp2 != NULL)
 		{
 			if ((*vars)->temp == temp2)
 			{
-				(*vars)->temp = (*vars)->temp->left;
+//				(*vars)->temp = temp2->left;
+				(*vars)->temp = temp2->right_two;
 				return ;
 			}
-			else if ((*vars)->temp == temp2->left)
+			else if ((*vars)->temp == temp2->right_two)
 			{
-				(*vars)->temp = (*vars)->temp->right;
-				return ;
-			}
-			else if ((*vars)->temp == temp2->right)
-			{
+//				if (temp2->right_next != NULL && ft_strcmp(temp2->right_next->cmd, "|") == 0)
+//					(*vars)->next_pipe = 1;
 				(*vars)->temp = temp2->right_next;
 				return ;
 			}
 			else
 				temp2 = temp2->right_next;
+//			else if ((*vars)->temp == temp2->right)
+//			{
+//				(*vars)->temp = temp2->right_next;
+//				return ;
+//			}
 			if (temp2 == NULL)
 				printf("NULL\n");
 			else
-				printf("NOT\n");
+			printf("NOT\n");
 		}
 		if (temp2 == NULL)
 		{
 			ft_putstr_fd("Erreur Next Command Not In Tree\n", 2);
 			exit(0);
 		}
+//		printf("cmd: %s\n", (*vars)->temp->cmd);
 	}
 }
 
 void		while_funcs(t_main **vars, t_paths **var)
 {
+	printf("while_funcs\n");
 	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
 	else if (ft_strcmp((*vars)->command, "cd") == 0)
@@ -155,6 +178,7 @@ void		handle_and2(t_main **vars, t_paths **var, t_tree **temp)
 
 void		handle_and(t_main **vars, t_paths **var, t_tree **temp)
 {
+	printf("handle_and\n");
 	(*vars)->type = 1;
 	if ((*temp)->left->left_two != NULL)
 	{
@@ -163,29 +187,43 @@ void		handle_and(t_main **vars, t_paths **var, t_tree **temp)
 	}
 }
 
+void		set_line2_args2_cmd2(t_main **vars, t_tree **temp)
+{
+	if ((*vars)->line2 != NULL)
+	{
+		free((*vars)->line2);
+		(*vars)->line2 = NULL;
+		(*vars)->line2 = (*temp)->cmd;
+	}
+	else
+		(*vars)->line2 = (*temp)->cmd;
+	ft_split_args2(vars);
+	(*vars)->cmd_list2 = str_split_pipes((*temp)->cmd);
+}
+
 void		handle_pipe2(t_main **vars, t_paths **var, t_tree **temp)
 {
+	t_tree	*temporary;
+
+	temporary = NULL;
 	*temp = (*vars)->var.root;
 	if ((*temp)->left->right_two != NULL)
 	{
 		*temp = (*vars)->var.root->left->right_two;
-		if ((*vars)->line2 != NULL)
+		set_line2_args2_cmd2(vars, temp);
+		if ((*vars)->var.root->child > 3)
 		{
-			free((*vars)->line2);
-			(*vars)->line2 = NULL;
-			(*vars)->line2 = (*temp)->cmd;
+			temporary = (*vars)->temp;
+			ft_next(vars);
+//			printf("temp: %s\n", (*vars)->temp->cmd);
+			(*vars)->temp = temporary;
 		}
-		else
-			(*vars)->line2 = (*temp)->cmd;
-		ft_split_args2(vars);
-		(*vars)->cmd_list2 = str_split_pipes((*temp)->cmd);
 		while_funcs(vars, var);
 	}
 }
 
-void		handle_pipe1(t_main **vars, t_tree **temp)
+void		set_line_args_cmd(t_main **vars, t_tree **temp)
 {
-	*temp = (*temp)->left->left_two;
 	if ((*vars)->line != NULL)
 	{
 		free((*vars)->line);
@@ -199,11 +237,18 @@ void		handle_pipe1(t_main **vars, t_tree **temp)
 	}
 	ft_split_args(vars);
 	(*vars)->cmd_list = str_split_pipes((*temp)->cmd);
+}
+
+void		handle_pipe1(t_main **vars, t_tree **temp)
+{
+	*temp = (*temp)->left->left_two;
+	set_line_args_cmd(vars, temp);
 //	while_funcs(vars, var);
 }
 
 void		handle_pipe(t_main **vars, t_paths **var, t_tree **temp)
 {
+	printf("handle_pipe\n");
 	(*vars)->type = 2;
 	if ((*temp)->left->left_two != NULL)
 	{
@@ -215,11 +260,12 @@ void		handle_pipe(t_main **vars, t_paths **var, t_tree **temp)
 void		print_command_lists(t_main **vars, int *i)
 {
 	*i = 0;
+//	printf("print_command_lists\n");
 	if ((*vars)->cmd_list != NULL)
 	{
 		while ((*vars)->cmd_list[*i] != NULL)
 		{
-			printf("(*vars)->cmd_list[i] %s\n", (*vars)->cmd_list[*i]);
+//			printf("(*vars)->cmd_list[i] %s\n", (*vars)->cmd_list[*i]);
 			(*i)++;
 		}
 	}
@@ -228,7 +274,7 @@ void		print_command_lists(t_main **vars, int *i)
 		*i = 0;
 		while ((*vars)->cmd_list2[*i] != NULL)
 		{
-			printf("(*vars)->cmd_list2[i] %s\n", (*vars)->cmd_list2[*i]);
+//			printf("(*vars)->cmd_list2[i] %s\n", (*vars)->cmd_list2[*i]);
 			(*i)++;
 		}
 	}
@@ -267,75 +313,86 @@ void		free_all(t_main **vars)
 {
 	if ((*vars)->command != NULL)
 	{
+		printf("TEST\n");
 		free((*vars)->command);
 		(*vars)->command = NULL;
 	}
 	if ((*vars)->split_args != NULL)
 	{
+		printf("TEST1\n");
 		free((*vars)->split_args);
 		(*vars)->split_args = NULL;
 	}
 	if ((*vars)->cmd_list != NULL)
 	{
+		printf("TEST2\n");
 		free((*vars)->cmd_list);
 		(*vars)->cmd_list = NULL;
 	}
 	if ((*vars)->line != NULL)
 	{
+		printf("TEST3\n");
 		free((*vars)->line);
 		(*vars)->line = NULL;
 	}
-	if ((*vars)->command2 != NULL)
-	{
-		free((*vars)->command2);
-		(*vars)->command2 = NULL;
-	}
-	if ((*vars)->split_args2 != NULL)
-	{
-		free((*vars)->split_args2);
-		(*vars)->split_args2 = NULL;
-	}
+//	if ((*vars)->command2 != NULL)
+//	{
+//		printf("TEST4\n");
+//		free((*vars)->command2);
+//		(*vars)->command2 = NULL;
+//	}
+//	if ((*vars)->split_args2 != NULL)
+//	{
+//		printf("TEST5\n");
+//		free((*vars)->split_args2);
+//		(*vars)->split_args2 = NULL;
+//	}
 	if ((*vars)->cmd_list2 != NULL)
 	{
+		printf("TEST6\n");
 		free((*vars)->cmd_list2);
 		(*vars)->cmd_list2 = NULL;
 	}
-	if ((*vars)->line2 != NULL)
-	{
-		free((*vars)->line2);
-		(*vars)->line2 = NULL;
-	}
+//	if ((*vars)->line2 != NULL)
+//	{
+//		printf("TEST7\n");
+//		free((*vars)->line2);
+//		(*vars)->line2 = NULL;
+//	}
 }
 
-void		loop_smpl_cmd(t_main **vars, t_paths **var)
+void		loop_smpl_cmd(t_main **vars/*, t_paths **var*/)
 {
 	free_all(vars);
 }
 
-void		loop_pipe_cmd(t_main **vars, t_paths **var)
+void		loop_pipe_cmd(t_main **vars/*, t_paths **var*/)
+{
+	printf("loop_pipe_cmd\n");
+	free_all(vars);
+}
+
+void		loop_and_cmd(t_main **vars/*, t_paths **var*/)
 {
 	free_all(vars);
 }
 
-void		loop_and_cmd(t_main **vars, t_paths **var)
+void		loops_choice(t_main **vars)
 {
-	free_all(vars);
-}
-
-void		loop_choice(t_main **vars, t_paths **var)
-{
+	printf("loops_choice\n");
 	if (ft_strcmp((*vars)->temp->cmd, ";") == 0)
-		loop_and_cmd(vars, var);
+		loop_and_cmd(vars/*, var*/);
 	else if (ft_strcmp((*vars)->temp->cmd, "|") == 0)
-		loop_pipe_cmd(vars, var);
+		loop_pipe_cmd(vars/*, var*/);
 	else
-		loop_smpl_cmd(vars, var);
+		loop_smpl_cmd(vars/*, var*/);
 }
 
 void		while_tree(t_main **vars, t_paths **var)
 {
 	int		i;
 
+	printf("while_tree\n");
 	init_while_tree(vars, &((*vars)->temp), &i);
 	while_tree_body(vars, var);
 	while ((*vars)->temp != NULL)
@@ -343,8 +400,8 @@ void		while_tree(t_main **vars, t_paths **var)
 		ft_next(vars);
 		if ((*vars)->temp != NULL)
 		{
-			printf("cmd: %s\n", (*vars)->temp->cmd);
-			loops_choice(vars, var);
+//			printf("cmd: %s\n", (*vars)->temp->cmd);
+			loops_choice(vars);
 		}
 	}
 	print_command_lists(vars, &i);

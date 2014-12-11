@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/04 18:13:19 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 16:59:52 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		exec_others_cmd(t_main **vars)
 				}
 				(*vars)->test_path =
 							ft_strjoin((*vars)->paths[i], (*vars)->command);
-				printf("test_path: %s\n", (*vars)->test_path);
+//				printf("test_path: %s\n", (*vars)->test_path);
 				execve((*vars)->test_path, (*vars)->split_args, (*vars)->env);
 				i++;
 			}
@@ -44,11 +44,13 @@ void		exec_others_cmd(t_main **vars)
 
 void		execute(t_main **vars, t_paths **var)
 {
-	if ((*vars)->type == 2)
+//	printf("(*vars)->type: %d", (*vars)->type);
+	if ((*vars)->type == 2 || (*vars)->type == 3)
 	{
 		dup2(((*vars)->pipe_fd)[1], 1);
 		close(((*vars)->pipe_fd)[0]);
 	}
+//	printf("(*vars)->type: %d", (*vars)->type);
 	if (ft_strcmp((*vars)->command, "cd") == 0)
 		cd_cmd(vars, var);
 	else if (ft_strcmp((*vars)->command, "setenv") == 0)

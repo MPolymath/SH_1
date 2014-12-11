@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/09 16:47:19 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/11 16:35:28 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_main
 	int				pipe_fd[2];
 	int				zero_backup;
 	int				one_backup;
+	int				next_pipe;
 	char			**env;
 	char			**temp_env;
 	char			*line;
@@ -195,5 +196,7 @@ int					split_counts(char *str);
 char				**str_split_pipes(char *str);
 t_tree				*ft_new_node(char **command);
 void				create_tree(char ***split_commands, t_ptr *var);
-
+void				set_line_args_cmd(t_main **vars, t_tree **temp);
+void				set_line2_args2_cmd2(t_main **vars, t_tree **temp);
+void				ft_next(t_main **vars);
 #endif
