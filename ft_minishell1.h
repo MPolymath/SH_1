@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/11 16:35:28 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/12 21:48:05 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct		s_main
 	int				i;
 	int				type;
 	int				pipe_fd[2];
+	int				pipe_fd2[2];
 	int				zero_backup;
 	int				one_backup;
 	int				next_pipe;

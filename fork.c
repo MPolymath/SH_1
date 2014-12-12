@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/11 17:16:45 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/12 23:21:50 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,45 @@ void	reset_in_out(t_main **vars)
 void	if_pipe(t_main **vars, t_paths **var, int *pid)
 {
 	int	i;
+//	int	pipe[2];
 
 	i = 0;
+//	pipe[0] = dup((*vars)->pipe_fd[0]);
+//	pipe[1] = dup((*vars)->pipe_fd[1]);
+//	pipe = pipe;
 	if ((*vars)->type == 2 || (*vars)->type == 3)
 	{
-		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
+//		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
+//		{
+//			dup2(((*vars)->pipe_fd)[1], 1);
+//			close(((*vars)->pipe_fd)[0]);
+//		}
+//		if ((*vars)->next_pipe == 0)
+//		{
+		printf("BLABLABLABLABLALBALBALBALLAB\n");
+		printf("vars->type %d\n", (*vars)->type);
+		if ((*vars)->next_pipe == 1)
+		{
 			dup2(((*vars)->pipe_fd)[0], 0);
-		else if ((*vars)->next_pipe == 0)
+//			dup2(1, ((*vars)->pipe_fd2[1]));
+//			close(((*vars)->pipe_fd2)[0]);
+//			close(0);
+		}
+		else
 			dup2(((*vars)->pipe_fd)[0], 0);
 		close(((*vars)->pipe_fd)[1]);
+//		if ((*vars)->next_pipe == 1)
+//		{
+//			printf("OKOKOKOKOOKOOKOKOKOOK\n");
+//			dup2(1, ((*vars)->pipe_fd2)[1]);
+//			dup2(((*vars)->pipe_fd2)[1], 1);
+//			close(((*vars)->pipe_fd2)[0]);
+//			close(0);
+//		}
+//		((*vars)->pipe_fd)[1] = pipe[1];
+//		dup2(((*vars)->pipe_fd)[1], 1);
+//		close(((*vars)->pipe_fd)[0]);
+//		}
 		*pid = fork();
 		i = 0;
 		if ((*vars)->line2 != NULL)
@@ -67,18 +97,29 @@ void	if_pipe(t_main **vars, t_paths **var, int *pid)
 			execute(vars, var);
 		else if (*pid != 0)
 		{
+//			((*vars)->pipe_fd)[0] = pipe[0];
+//			((*vars)->pipe_fd)[1] = pipe[1];
+//			dup2(((*vars)->pipe_fd)[1], 1);
+//			close(((*vars)->pipe_fd)[0]);
+//			close(1);
 			wait(NULL);
-			printf("vars->type: %d\n", (*vars)->type);
-			printf("vars->next_pipe: %d\n", (*vars)->next_pipe);
-			if ((*vars)->next_pipe == 0) // added
-				reset_in_out(vars);
-			if ((*vars)->next_pipe == 1)
-				(*vars)->type = 3;
-			if ((*vars)->type == 3)
-			{
-				ft_next(vars);
-				if ((*vars)->temp != NULL)
-				{
+//			dup2((*vars)->pipe_fd2[1], 0); start;
+//			close((*vars)->pipe_fd2[0]);
+//			printf("THISISWHERE I NEED TO GET IT\n");
+//			printf("vars->type: %d\n", (*vars)->type);
+//			printf("vars->next_pipe: %d\n", (*vars)->next_pipe);
+//			if ((*vars)->next_pipe == 0) // added
+//				reset_in_out(vars);
+//			if ((*vars)->next_pipe == 1)
+//				(*vars)->type = 3;
+//			if ((*vars)->type == 3)
+//			{
+//				printf("Test\n");
+//				ft_next(vars);
+//				if ((*vars)->temp != NULL)
+//				{
+//					dup2(1, (*vars)->pipe_fd2[1]); comment
+//					close((*vars)->pipe_fd2[0]); comment
 					set_line_args_cmd(vars, &((*vars)->temp));
 					printf("(*vars)->line: %s\n", (*vars)->line);
 					printf("(*vars)->cmd: %s\n", (*vars)->command);
@@ -88,12 +129,19 @@ void	if_pipe(t_main **vars, t_paths **var, int *pid)
 						printf("(*vars)->split_args[%d]: %s\n", i, (*vars)->split_args[i]);
 						i++;
 					}
+					(*vars)->next_pipe = 2;
+					*pid = fork();
+					if ((*pid == 0))
+					{
+						execute(vars, var);
+					}
+					else if (*pid != 0)
+					{
+						wait(NULL);
+					}
 				}
-				else
-				{
-					(*vars)->type = 0;
-					printf("NULL\n");
-				}
+				(*vars)->type = 0;
+				printf("NULL\n");
 //				set_line2_args2_cmd2(vars, &((*vars)->temp));
 //				if_pipe(vars, var, &(*pid));
 			}
@@ -120,7 +168,15 @@ void	ft_fork(t_main **vars, t_paths **var)
 	int	pid;
 
 	if ((*vars)->type == 2) // added next_pipe
+	{
 		pipe((*vars)->pipe_fd);
+		if ((*vars)->next_pipe == 1)
+		{
+			pipe((*vars)->pipe_fd2);
+			dup2(((*vars)->pipe_fd2)[0], 0);
+			close(((*vars)->pipe_fd2)[1]);
+		}
+	}
 	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
 	pid = fork();
@@ -132,9 +188,29 @@ void	ft_fork(t_main **vars, t_paths **var)
 		while ((*vars)->type == 3 || (*vars)->type == 2)
 		{
 			printf("ERF\n");
-			if_pipe(vars, var, &pid);
+//			pid = fork();
+//			if (pid == 0)
+//			{
+//				printf("TEST2\n");
+//				dup2(((*vars)->pipe_fd)[1], 1);
+//				close(((*vars)->pipe_fd)[0]);
+//				printf("TEST3\n");
+				if_pipe(vars, var, &pid);
+//				printf("TEST4\n");
+//			}
+//			else if (pid > 0)
+//			{
+//				wait(NULL);
+//				printf("TEST5\n");
+//			}
+			if ((*vars)->type == 3)
+				printf("TYPE: %d\n", (*vars)->type);
 		}
-		env_restore(vars);
+		if ((*vars)->temp_env != NULL)
+		{
+			printf("TOTO\n");
+			env_restore(vars);
+		}
 	}
 	else
 		ft_putstr("Fork Error\n");
