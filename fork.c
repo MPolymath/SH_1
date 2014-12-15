@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/12 23:21:50 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/15 23:00:55 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,26 +165,31 @@ void	env_restore(t_main **vars)
 
 void	ft_fork(t_main **vars, t_paths **var)
 {
-	int	pid;
+	int		pid;
+	int		save;
+	char	*next_priority;
 
-	if ((*vars)->type == 2) // added next_pipe
-	{
+	save = 0;
+	next_priority = 0;
+	if ((*vars)->type == 2) // added next_pipe=
 		pipe((*vars)->pipe_fd);
+	if (ft_strcmp((*vars)->command, "exit") == 0)
+		exit(0);
+	while ((*vars)->temp != NULL)
+	{
 		if ((*vars)->next_pipe == 1)
 		{
 			pipe((*vars)->pipe_fd2);
 			dup2(((*vars)->pipe_fd2)[0], 0);
 			close(((*vars)->pipe_fd2)[1]);
 		}
-	}
-	if (ft_strcmp((*vars)->command, "exit") == 0)
-		exit(0);
-	pid = fork();
-	if (pid == 0)
-		execute(vars, var);
-	else if (pid > 0)
-	{
-		wait(NULL);
+		pid = fork();
+		if (pid == 0)
+			execute(vars, var);
+		else if (pid > 0)
+		{
+			wait(NULL);
+/*
 		while ((*vars)->type == 3 || (*vars)->type == 2)
 		{
 			printf("ERF\n");
@@ -206,12 +211,15 @@ void	ft_fork(t_main **vars, t_paths **var)
 			if ((*vars)->type == 3)
 				printf("TYPE: %d\n", (*vars)->type);
 		}
-		if ((*vars)->temp_env != NULL)
-		{
-			printf("TOTO\n");
-			env_restore(vars);
+*/
+			if ((*vars)->temp_env != NULL)
+			{
+				printf("TOTO\n");
+				env_restorey(vars);
+			}
+			(*vars)->next_ypipe = 0;
+			ft_next(vars);
 		}
-	}
-	else
+		else
 		ft_putstr("Fork Error\n");
 }

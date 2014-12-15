@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/11 16:34:47 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/15 22:26:45 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ void		while_tree_body(t_main **vars, t_paths **var)
 {
 	if (ft_strcmp(((*vars)->temp)->left->cmd, ";") == 0) // ; handling
 		handle_and(vars, var, &((*vars)->temp));
-   	else if (ft_strcmp((*vars)->temp->left->cmd, "|") == 0)
+	else if (ft_strcmp((*vars)->temp->left->cmd, "|") == 0)
 		handle_pipe(vars, var, &(*vars)->temp);
 	else if ((*vars)->temp->left != NULL && (ft_strcmp((*vars)->temp->left->cmd, "|") == 0 ||
 			ft_strcmp((*vars)->temp->left->cmd, ";") == 0))
