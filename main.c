@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/15 22:26:45 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/16 07:13:33 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void		init_main(t_main *vars, int argc, char **argv)
 	vars->args_nbr = 0;
 	vars->i = 0;
 	vars->next_pipe = 0;
+	vars->previous_pipe = 0;
 	vars->env = NULL;
 	vars->temp_env = NULL;
 	vars->line = NULL;
@@ -60,7 +61,10 @@ void		ft_next(t_main **vars)
 	}
 	else if ((*vars)->var.root->child == 3)
 	{
-		(*vars)->temp = NULL;
+		if ((*vars)->temp == (*vars)->var.root->left->right_two)
+			(*vars)->temp = NULL;
+		else
+			(*vars)->temp = (*vars)->var.root->left->right_two;
 		return ;
 	}
 	else if ((*vars)->var.root->child > 3)
@@ -68,8 +72,11 @@ void		ft_next(t_main **vars)
 		temp2 = (*vars)->var.root->right_next;
 		if ((*vars)->temp == (*vars)->var.root->left->right_two && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
 		{
-			if (ft_strcmp(temp2->cmd, "|") == 0)
+			if (ft_strcmp(temp2->cmd, "|") == 0 && (*vars)->type == 2)
+			{
+				printf("VARS NEXT PIPE\n");
 				(*vars)->next_pipe = 1;
+			}
 			(*vars)->temp = temp2->right_two;
 			return ;
 		}

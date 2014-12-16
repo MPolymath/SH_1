@@ -1,0 +1,5 @@
+while ()
+	if save != 0 reuse save
+	if next is pipe open pipe and set up if necessary
+	execute command in child
+	save result

@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/12 23:15:03 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/16 08:00:37 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		exec_others_cmd(t_main **vars)
 void		execute(t_main **vars, t_paths **var)
 {
 //	printf("(*vars)->type: %d", (*vars)->type);
-	if ((*vars)->type == 2 || (*vars)->type == 3)
+	if ((*vars)->next_pipe == 1 || (*vars)->type == 2)
 	{
 //		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
 //		{
@@ -69,27 +69,23 @@ void		execute(t_main **vars, t_paths **var)
 //			close(((*vars)->pipe_fd)[0]);
 //		}
 //		else
-		if ((*vars)->next_pipe == 1)
-		{
-			dup2(((*vars)->pipe_fd)[1], 1);
-			close(((*vars)->pipe_fd2)[1]);
-			close(((*vars)->pipe_fd2)[0]);
-			close(1);
-		}
-		else if ((*vars)->next_pipe == 0)
-		{
-			dup2(((*vars)->pipe_fd)[1], 1);
-		}
-		else if ((*vars)->next_pipe == 2)
-		{
-			dup2(((*vars)->pipe_fd2)[0], 0);
-			close(((*vars)->pipe_fd2)[1]);
-			close(((*vars)->pipe_fd)[1]);
-//			close(((*vars)->pipe_fd2)[0]);
-//			close(1);
-		}
+		printf("command: %s\n", (*vars)->command);
+//		close(1);
+		printf("PIPE #: %d\n", (*vars)->pipe_fd[0]);
+		dup2(((*vars)->pipe_fd)[1], 1);
 		close(((*vars)->pipe_fd)[0]);
+		printf("SUPERHERO!!!!!\n");
+//		printf("TEST3333\n");
 	}
+	else if ((*vars)->previous_pipe == 1 && (*vars)->next_pipe == 0)
+	{
+		printf("PIPE #: %d\n", (*vars)->pipe_fd[1]);
+		dup2(((*vars)->pipe_fd)[0], 0);
+		close(((*vars)->pipe_fd)[1]);
+	}
+//	else if ((*vars)->next_pipe == 0 && save != 0)
+//	{
+//	}
 //	printf("(*vars)->type: %d", (*vars)->type);
 	if (ft_strcmp((*vars)->command, "cd") == 0)
 		cd_cmd(vars, var);
