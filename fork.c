@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/16 08:00:57 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/17 14:56:28 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,11 @@ void	ft_fork(t_main **vars, t_paths **var)
 {
 	int		pid;
 	int		save;
+	t_tree	*temporary;
 //	char	*next_priority;
 
 	save = 0;
+	temporary = NULL;
 //	next_priority = 0;
 	if (ft_strcmp((*vars)->command, "exit") == 0)
 		exit(0);
@@ -185,7 +187,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 		if ((save != 0)  && ((*vars)->next_pipe != 1))
 		{
 			printf("TEST22222\n");
-			printf("Save %d: \n", save);
+			printf("Save2 %d: \n", save);
 			if ((*vars)->previous_pipe == 1)
 				dup2(save, ((*vars)->pipe_fd)[0]);
 //			else
@@ -200,6 +202,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 		else if ((save == 0) && (*vars)->type != 2)
 		{
 			printf("TEST444444\n");
+			printf("Save %d: \n", save);
 			dup2(((*vars)->pipe_fd)[0], 0);
 //			close(((*vars)->pipe_fd)[1]);
 //			close(1);
@@ -223,18 +226,46 @@ void	ft_fork(t_main **vars, t_paths **var)
 				(*vars)->previous_pipe = 1;
 			else if ((*vars)->next_pipe == 0)
 				(*vars)->previous_pipe = 0;
-			if ((save == 0) && (*vars)->type == 2)
+			if ((*vars)->last_command == 1)
+			{
+				close(((*vars)->pipe_fd)[1]);
+				printf("GOGOGOGOGO GADGET O TOTO\n");
+			}
+			else if ((save == 0) && (*vars)->type == 2)
 			{
 				close(((*vars)->pipe_fd)[1]);
 				if ((*vars)->type == 2 || (*vars)->next_pipe == 1)
 					save = (*vars)->pipe_fd[0];
+				temporary = (*vars)->temp;
+				(*vars)->next_pipe = 0;
+				ft_next(vars);
+				if ((*vars)->temp == NULL)
+				{
+					printf("NULL ALERT!!!!!! EERRRRRRRRRROOOOOOOOOORRRRR\n");
+					(*vars)->next_pipe = 0;
+					(*vars)->last_command = 1;
+				}
+				(*vars)->temp = temporary;
+				temporary = NULL;
 				printf("save ====== 0000000000\n");
 			}
 			else if ((save != 0 && (*vars)->next_pipe == 1)) // added next_pipe=
 			{
 				close(((*vars)->pipe_fd)[1]);
 //				close(save);
-				save = (*vars)->pipe_fd[0];
+				temporary = (*vars)->temp;
+				(*vars)->next_pipe = 0;
+				ft_next(vars);
+				if ((*vars)->temp == NULL)
+				{
+					printf("NULL ALERT!!!!!! EERRRRRRRRRROOOOOOOOOORRRRR2\n");
+					(*vars)->next_pipe = 0;
+					(*vars)->last_command = 1;
+				}
+				else
+					save = (*vars)->pipe_fd[0];
+				(*vars)->temp = temporary;
+				temporary = NULL;
 				printf("PPPPPPPIPPPPPPPE 2: %d\n", save);
 				printf("save !!!=== 0000000000\n");
 			}
@@ -248,7 +279,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 			}
 			else
 			{
-//				close(((*vars)->pipe_fd)[1]);
+				close(((*vars)->pipe_fd)[1]);
 				printf("TESTINGGGGGG!!!!\n");
 				close(save);
 				save = 0;
@@ -284,14 +315,12 @@ void	ft_fork(t_main **vars, t_paths **var)
 //			printf("vars next pipe %d\n", (*vars)->next_pipe);
 //			printf("temp->cmd: %s\n", (*vars)->temp->cmd);
 //			ft_next(vars);
-			if ((*vars)->type != 2)
-			{
-				printf("RESET ZERO\n");
-				(*vars)->next_pipe = 0;
-			}
 			printf("(*vars)->typeooo: %d\n", (*vars)->type);
 			if ((*vars)->type != 2)
 				ft_next(vars);
+			printf("NEXT PIPEEEEEEEE: %d\n", (*vars)->next_pipe);
+//			printf("RESET ZERO\n");
+//			(*vars)->next_pipe = 0;
 			if ((*vars)->temp != NULL)
 			{
 				set_line_args_cmd(vars, &(*vars)->temp);
@@ -301,7 +330,6 @@ void	ft_fork(t_main **vars, t_paths **var)
 			{
 				printf("NULL\n");
 			}
-			printf("NEXT PIPEEEEEEEE: %d\n", (*vars)->next_pipe);
 //			reset_in_out(vars);
 			close(1);
 			close(0);

@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/16 08:00:37 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/17 14:58:37 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		exec_others_cmd(t_main **vars)
 void		execute(t_main **vars, t_paths **var)
 {
 //	printf("(*vars)->type: %d", (*vars)->type);
-	if ((*vars)->next_pipe == 1 || (*vars)->type == 2)
+	if ((*vars)->next_pipe == 1 || (*vars)->type == 2 || (*vars)->last_command == 1)
 	{
 //		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
 //		{

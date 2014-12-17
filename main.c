@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/16 07:13:33 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/17 14:39:37 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void		ft_next(t_main **vars)
 	t_tree	*temp2;
 
 	printf("ft_next\n");
+	if ((*vars)->temp != NULL)
+		printf("COMMMMMMMANDS HOMEYYEYEYE: %s\n", (*vars)->temp->cmd);
 	temp2 = NULL;
 	if ((*vars)->var.root->child == 1)
 	{
@@ -62,21 +64,31 @@ void		ft_next(t_main **vars)
 	else if ((*vars)->var.root->child == 3)
 	{
 		if ((*vars)->temp == (*vars)->var.root->left->right_two)
+		{
+			printf("GOGOGOGOGOGOGOGOGOGOGOGOG2\n");
 			(*vars)->temp = NULL;
+			(*vars)->next_pipe = 0;
+		}
 		else
+		{
+			printf("GOGOGOGOGOGOGOGOGOGOGOGOG\n");
+			(*vars)->next_pipe = 0;
 			(*vars)->temp = (*vars)->var.root->left->right_two;
+		}
 		return ;
 	}
 	else if ((*vars)->var.root->child > 3)
 	{
 		temp2 = (*vars)->var.root->right_next;
-		if ((*vars)->temp == (*vars)->var.root->left->right_two && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
+		if (((*vars)->temp == (*vars)->var.root->left->right_two) && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
 		{
-			if (ft_strcmp(temp2->cmd, "|") == 0 && (*vars)->type == 2)
+			if (ft_strcmp(temp2->cmd, "|") == 0)
 			{
 				printf("VARS NEXT PIPE\n");
 				(*vars)->next_pipe = 1;
 			}
+			else
+				(*vars)->next_pipe = 0;
 			(*vars)->temp = temp2->right_two;
 			return ;
 		}
@@ -93,11 +105,21 @@ void		ft_next(t_main **vars)
 			if ((*vars)->temp == temp2)
 			{
 //				(*vars)->temp = temp2->left;
+				(*vars)->next_pipe = 0;
 				(*vars)->temp = temp2->right_two;
 				return ;
 			}
 			else if ((*vars)->temp == temp2->right_two)
 			{
+				if (temp2->right_next != NULL)
+				{
+					if (ft_strcmp(temp2->right_next->cmd, "|") == 0)
+						(*vars)->next_pipe = 1;
+					else
+						(*vars)->next_pipe = 0;
+				}
+				else
+					(*vars)->next_pipe = 0;
 //				if (temp2->right_next != NULL && ft_strcmp(temp2->right_next->cmd, "|") == 0)
 //					(*vars)->next_pipe = 1;
 				(*vars)->temp = temp2->right_next;
@@ -250,6 +272,7 @@ void		handle_pipe1(t_main **vars, t_tree **temp)
 {
 	*temp = (*temp)->left->left_two;
 	set_line_args_cmd(vars, temp);
+	(*vars)->next_pipe = 1;
 //	while_funcs(vars, var);
 }
 

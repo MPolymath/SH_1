@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:18:36 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/16 06:20:49 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/17 14:45:19 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct		s_main
 	int				one_backup;
 	int				next_pipe;
 	int				previous_pipe;
+	int				last_command;
 	char			**env;
 	char			**temp_env;
 	char			*line;
