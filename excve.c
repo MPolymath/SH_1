@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/17 14:58:37 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/19 21:57:17 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void		exec_others_cmd(t_main **vars)
 void		execute(t_main **vars, t_paths **var)
 {
 //	printf("(*vars)->type: %d", (*vars)->type);
-	if ((*vars)->next_pipe == 1 || (*vars)->type == 2 || (*vars)->last_command == 1)
+	printf("next_pipe !!!!!! !!!!! !!!! !!! %d\n", (*vars)->next_pipe);
+	if ((*vars)->next_pipe == 1 || (*vars)->type == 2)
 	{
 //		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
 //		{
@@ -79,9 +80,21 @@ void		execute(t_main **vars, t_paths **var)
 	}
 	else if ((*vars)->previous_pipe == 1 && (*vars)->next_pipe == 0)
 	{
-		printf("PIPE #: %d\n", (*vars)->pipe_fd[1]);
-		dup2(((*vars)->pipe_fd)[0], 0);
-		close(((*vars)->pipe_fd)[1]);
+		(*vars)->previous_pipe = 0;
+		ft_next(vars);
+		if ((*vars)->previous_pipe == 1)
+		{
+			printf("PIPE #: %d\n", (*vars)->pipe_fd[0]);
+			dup2(((*vars)->pipe_fd)[1], 1);
+			close(((*vars)->pipe_fd)[0]);
+			printf("SUPERHERO!!!!!\n");
+		}
+		else
+		{
+			printf("PIPE #: %d\n", (*vars)->pipe_fd[1]);
+			dup2(((*vars)->pipe_fd)[0], 0);
+			close(((*vars)->pipe_fd)[1]);
+		}
 	}
 //	else if ((*vars)->next_pipe == 0 && save != 0)
 //	{

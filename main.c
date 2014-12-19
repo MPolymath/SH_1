@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/17 14:39:37 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/19 21:46:29 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void		ft_next(t_main **vars)
 	t_tree	*temp2;
 
 	printf("ft_next\n");
+	printf("Vars root child %d\n", (*vars)->var.root->child);
 	if ((*vars)->temp != NULL)
 		printf("COMMMMMMMANDS HOMEYYEYEYE: %s\n", (*vars)->temp->cmd);
 	temp2 = NULL;
@@ -80,15 +81,42 @@ void		ft_next(t_main **vars)
 	else if ((*vars)->var.root->child > 3)
 	{
 		temp2 = (*vars)->var.root->right_next;
-		if (((*vars)->temp == (*vars)->var.root->left->right_two) && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
+		if ((*vars)->temp == (*vars)->var.root->left->left_two)
 		{
+			if ((*vars)->var.root->left != NULL && (ft_strcmp((*vars)->var.root->left->cmd, "|") == 0))
+			{
+				(*vars)->previous_pipe = 1;
+				if ((*vars)->var.root->right_next != NULL && ft_strcmp((*vars)->var.root->right_next->cmd, "|") == 0)
+					(*vars)->next_pipe = 1;
+				else
+					(*vars)->next_pipe = 0;
+				(*vars)->temp = (*vars)->var.root->left->right_two;
+				return ;
+			}
+			else if ((*vars)->var.root->left != NULL && (ft_strcmp((*vars)->var.root->left->cmd, "&") == 0))
+			{
+				(*vars)->previous_pipe = 0;
+				(*vars)->next_pipe = 0;
+				(*vars)->temp = (*vars)->var.root->left->right_two;
+			}
+		}
+		else if (((*vars)->temp == (*vars)->var.root->left->right_two) && temp2 != NULL && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
+		{
+			printf("AT 3rd JOINT\n");
 			if (ft_strcmp(temp2->cmd, "|") == 0)
 			{
 				printf("VARS NEXT PIPE\n");
-				(*vars)->next_pipe = 1;
+				(*vars)->previous_pipe = 1;
+				if (temp2->right_two != NULL && temp2->right_next != NULL && (ft_strcmp(temp2->right_next->cmd, "|") == 0))
+					(*vars)->next_pipe = 1;
+				else
+					(*vars)->next_pipe = 0;
 			}
 			else
+			{
 				(*vars)->next_pipe = 0;
+				(*vars)->previous_pipe = 0;
+			}
 			(*vars)->temp = temp2->right_two;
 			return ;
 		}
@@ -105,6 +133,7 @@ void		ft_next(t_main **vars)
 			if ((*vars)->temp == temp2)
 			{
 //				(*vars)->temp = temp2->left;
+				(*vars)->previous_pipe = 0;
 				(*vars)->next_pipe = 0;
 				(*vars)->temp = temp2->right_two;
 				return ;
@@ -114,12 +143,21 @@ void		ft_next(t_main **vars)
 				if (temp2->right_next != NULL)
 				{
 					if (ft_strcmp(temp2->right_next->cmd, "|") == 0)
-						(*vars)->next_pipe = 1;
+					{
+						(*vars)->previous_pipe = 1;
+						if (temp2->right_next->right_two != NULL && temp2->right_next->right_next != NULL && (ft_strcmp(temp2->right_next->right_next->cmd, "|") == 0))
+							(*vars)->next_pipe = 1;
+						else
+							(*vars)->next_pipe = 0;
+					}
 					else
-						(*vars)->next_pipe = 0;
+						(*vars)->previous_pipe = 0;
 				}
 				else
+				{
+					(*vars)->previous_pipe = 0;
 					(*vars)->next_pipe = 0;
+				}
 //				if (temp2->right_next != NULL && ft_strcmp(temp2->right_next->cmd, "|") == 0)
 //					(*vars)->next_pipe = 1;
 				(*vars)->temp = temp2->right_next;
@@ -209,6 +247,8 @@ void		handle_and(t_main **vars, t_paths **var, t_tree **temp)
 {
 	printf("handle_and\n");
 	(*vars)->type = 1;
+	(*vars)->next_pipe = 0;
+	(*vars)->previous_pipe = 0;
 	if ((*temp)->left->left_two != NULL)
 	{
 		handle_and1(vars, var, temp);
@@ -270,9 +310,26 @@ void		set_line_args_cmd(t_main **vars, t_tree **temp)
 
 void		handle_pipe1(t_main **vars, t_tree **temp)
 {
+	t_tree *temporary;
+
+	temporary = NULL;
 	*temp = (*temp)->left->left_two;
 	set_line_args_cmd(vars, temp);
-	(*vars)->next_pipe = 1;
+	(*vars)->previous_pipe = 1;
+	temporary = (*vars)->temp;
+	ft_next(vars);
+	if ((*vars)->temp == ((*vars)->var.root->left->right_two) && ((*vars)->var.root->right_next != NULL) && ft_strcmp((*vars)->var.root->right_next->cmd,  "|") == 0)
+	{
+		printf("COMMAND1: %s\n", (*vars)->temp->cmd);
+		(*vars)->next_pipe = 1;
+	}
+	else
+	{
+		(*vars)->next_pipe = 0;
+		printf("COMMAND2: %s\n", (*vars)->temp->cmd);
+	}
+	(*vars)->temp = temporary;
+	printf("COMMAND3: %s\n", (*vars)->temp->cmd);
 //	while_funcs(vars, var);
 }
 
