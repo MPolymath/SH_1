@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 16:52:19 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/19 21:47:47 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/27 13:03:38 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 {
 	int		pid;
 	int		save;
+//	int		j;
 	t_tree	*temporary;
 //	char	*next_priority;
 
@@ -177,19 +178,43 @@ void	ft_fork(t_main **vars, t_paths **var)
 		exit(0);
 	while ((*vars)->temp != NULL)
 	{
+//		j = 0;
+		printf("!!!!!!! &&&&&& (*vars)->one_backup &&&&& !!!!!!! %d\n", (*vars)->one_backup);
+		printf("!!!!!!! &&&&&& (*vars)->zero_backup &&&&& !!!!!!! %d\n", (*vars)->zero_backup);
+		printf("SAVE_________________________= %d\n", save);
 		printf("(*vars)->type: %d\n", (*vars)->type);
 		if ((*vars)->type == 2 || (*vars)->next_pipe == 1 || (*vars)->previous_pipe == 1)
 		{
 			printf("Test vars->pipe_fd \n");
-			printf("Save %d: \n", save);
+			printf("Save TIME!!!! %d:::::: \n", save);
+			printf("(*vars)->pipe_fd[0]  %d:::::: \n", (*vars)->pipe_fd[0]);
+			printf("(*vars)->pipe_fd[1]  %d:::::: \n", (*vars)->pipe_fd[1]);
+			if (save != 0)
+			{
+				if ((*vars)->pipe_fd[0] != save)
+				{
+					close((*vars)->pipe_fd[0]);
+					printf(" OH NO HE DIDNT CLOSE FD[0]\n");
+				}
+				else if ((*vars)->pipe_fd[1] != save)
+				{
+					close((*vars)->pipe_fd[1]);
+					printf(" OH NO HE DIDNT CLOSE FD[1]\n");
+				}
+			}
 			pipe((*vars)->pipe_fd);
+			printf("AFTER PARTY (*vars)->pipe_fd[0]  %d:::::: \n", (*vars)->pipe_fd[0]);
+			printf("AFTER PARTY (*vars)->pipe_fd[1]  %d:::::: \n", (*vars)->pipe_fd[1]);
 		}
 		if ((save != 0)  && ((*vars)->next_pipe != 1))
 		{
-			printf("TEST22222\n");
-			printf("Save2 %d: \n", save);
-			if ((*vars)->previous_pipe == 1)
-				dup2(save, ((*vars)->pipe_fd)[0]);
+//			if ((*vars)->previous_pipe == 1)
+//			{
+			printf("!)@(#)$))(!@)#($)!@#()!@#($)!@(\n");
+			printf("!)@(#)$))(!@)#($)!@#()!@#($)!@(\n");
+			dup2(save, ((*vars)->pipe_fd)[0]);
+//			dup2(((*vars)->pipe_fd)[0], 0); have to put back on
+//			}
 //			close(((*vars)->pipe_fd)[1]);
 //			else
 //				dup2(save, 0);
@@ -197,11 +222,13 @@ void	ft_fork(t_main **vars, t_paths **var)
 		else if ((save != 0 && (*vars)->next_pipe == 1)) // added next_pipe=
 		{
 			printf("TEST33333\n");
+			printf("TEST33333\n");
 			dup2(save, ((*vars)->pipe_fd)[0]);
 //			close(1);
 		}
-		else if ((save == 0) && (*vars)->type != 2)
+		else if ((save == 0) /*&& (*vars)->type != 2*/)
 		{
+			printf("TEST444444\n");
 			printf("TEST444444\n");
 			printf("Save %d: \n", save);
 			dup2(((*vars)->pipe_fd)[0], 0);
@@ -237,6 +264,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 				close(((*vars)->pipe_fd)[1]);
 				if ((*vars)->type == 2 || (*vars)->previous_pipe == 1)
 					save = (*vars)->pipe_fd[0];
+				printf("S@ve type = 2 prev_pipe = 1 %d: \n", save);
 				temporary = (*vars)->temp;
 //				if ((*vars)->type != 2) taken away
 //					(*vars)->next_pipe = 0; taken away
@@ -270,6 +298,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 					ft_next(vars);
 					if ((*vars)->temp == NULL)
 						(*vars)->next_pipe = 0;
+					printf("S@ve temp != Null %d: \n", save);
 					save = (*vars)->pipe_fd[0];
 				}
 				(*vars)->temp = temporary;
@@ -280,10 +309,11 @@ void	ft_fork(t_main **vars, t_paths **var)
 			}
 			else if ((*vars)->previous_pipe == 1)
 			{
-				close(((*vars)->pipe_fd)[1]);
+//				save = (*vars)->pipe_fd[1]; //need to put back on
+				dup2((*vars)->pipe_fd[1], 1); //need to put back
+				close(((*vars)->pipe_fd)[0]);
 //				close(save);
-				save = (*vars)->pipe_fd[0];
-				printf("PPPPPPPIPPPPPPPE 2: %d\n", save);
+				printf("OOOOOOOOOOOOO OOOOOOOOO OOOOOOOO OOOOO: %d\n", save);
 				printf("save ======== 0000000000 && YEAAAAAA!!!");
 			}
 			else
@@ -338,15 +368,58 @@ void	ft_fork(t_main **vars, t_paths **var)
 			}
 			else
 			{
-				printf("NULLtoto\n");
+				printf("NULL\n");
+				printf("\n");
+				printf("\n");
+				printf("\n");
+				close((*vars)->pipe_fd[1]);
+				printf("\n");
+				printf("\n");
+				printf("\n");
+/*				printf("(*vars)->command :%s\n", (*vars)->command);
+				while ((*vars)->split_args[j] != NULL)
+				{
+					printf("ARGS :%s\n", (*vars)->split_args[j]);
+					j++;
+				}
+				if (save != 0)
+				{
+					if ((*vars)->pipe_fd[0] != save)
+					{
+						close((*vars)->pipe_fd[0]);
+						printf("{|{|{| OH NO HE DIDNT CLOSE FD[0] END |}|}|\n");
+					}
+					else if ((*vars)->pipe_fd[1] != save)
+					{
+						close((*vars)->pipe_fd[1]);
+						printf("{|{|{| OH NO HE DIDNT CLOSE FD[1] END |}|}|}\n");
+					}
+					pipe((*vars)->pipe_fd);
+					dup2(save, (*vars)->pipe_fd[0]);
+					close((*vars)->pipe_fd[1]);
+				}
+				pid = fork();
+				if (pid == 0)
+				{
+					printf("TOTO\n");
+					execute(vars, var);
+				}
+				else if (pid > 0)
+				{
+					wait(NULL);
+				}
+				*/
 			}
 //			reset_in_out(vars);
 			close(1);
 			close(0);
 			dup2((*vars)->one_backup, 1);
 			dup2((*vars)->zero_backup, 0);
-			(*vars)->one_backup = dup(1);
-			(*vars)->zero_backup = dup(0);
+//			(*vars)->one_backup = dup(1);
+//			(*vars)->zero_backup = dup(0);
+			printf("(*vars)->one_backup &&&&& !!!!!!! %d\n", (*vars)->one_backup);
+			printf("(*vars)->zero_backup &&&&& !!!!!!! %d\n", (*vars)->zero_backup);
+			printf("________________________SAVE_________________________= %d\n", save);
 //			if ((*vars)->next_pipe != 1)
 //				save = 0;
 //			if (save != 0)
@@ -354,6 +427,7 @@ void	ft_fork(t_main **vars, t_paths **var)
 				(*vars)->type = 3;
 			else
 				(*vars)->type = 0;
+			printf("END OF LINE EVERYONE GET OFF!!!! !!!\n");
 		}
 		else
 			ft_putstr("Fork Error\n");

@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/19 21:46:29 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/27 09:53:12 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,10 +550,10 @@ int			main(int argc, char **argv, char **envp)
 	init_main(&(vr.vars), argc, argv);
 	cpy_env(envp, &(vr.vars));
 	vr.vars.paths = ft_split_path(envp, &(vr.vars.env));
+	vr.vars.zero_backup = dup(0);
+	vr.vars.one_backup = dup(1);
 	while (get_next_line(vr.vars.fd, &(vr.vars.line)))
 	{
-		vr.vars.zero_backup = dup(0);
-		vr.vars.one_backup = dup(1);
 		if (vr.vars.line != NULL)
 		{
 			ft_split_args(&(vr.temp2));
