@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/12 13:38:02 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/27 12:55:26 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/27 18:08:22 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 void		exec_others_cmd(t_main **vars)
 {
 	int		i;
-	int		j;
+//	int		j;
 
 	i = 0;
-	j = 0;
-	printf("YABABABABABABABABBDADADADDADADABABABABADOOODODODODOOD EXEC OTHERS CMD\n");
+//	j = 0;
+//	printf("YABABABABABABABABBDADADADDADADABABABABADOOODODODODOOD EXEC OTHERS CMD\n");
 	if ((*vars)->paths != NULL)
 	{
 		if (execve((*vars)->command, (*vars)->split_args, (*vars)->env) == -1)
@@ -34,20 +34,20 @@ void		exec_others_cmd(t_main **vars)
 				}
 				(*vars)->test_path =
 							ft_strjoin((*vars)->paths[i], (*vars)->command);
-				printf("test_path: %s\n", (*vars)->test_path);
+//				printf("test_path: %s\n", (*vars)->test_path);
 				if (ft_strcmp((*vars)->test_path, "/usr/bin/wc") == 0)
 				{
-					while ((*vars)->split_args[j] != NULL)
-					{
-						printf("split[%d] :%s\n", j, (*vars)->split_args[j]);
-						j++;
-					}
-					j = 0;
-					while (((*vars)->env)[j] != NULL)
-					{
-						printf("env[%d] %s\n",j ,((*vars)->env)[j]);
-						j++;
-					}
+//					while ((*vars)->split_args[j] != NULL)
+//					{
+//						printf("split[%d] :%s\n", j, (*vars)->split_args[j]);
+//						j++;
+//					}
+//					j = 0;
+//					while (((*vars)->env)[j] != NULL)
+//					{
+//						printf("env[%d] %s\n",j ,((*vars)->env)[j]);
+//						j++;
+//					}
 				}
 				execve((*vars)->test_path, (*vars)->split_args, (*vars)->env);
 				i++;
@@ -61,19 +61,19 @@ void		exec_others_cmd(t_main **vars)
 
 void		execute(t_main **vars, t_paths **var)
 {
-	int		j;
+//	int		j;
 	t_tree	*temp;
 
-	j = 0;
+//	j = 0;
 //	printf("(*vars)->type: %d", (*vars)->type);
-	printf("next_pipe !!!!!! !!!!! !!!! !!! %d\n", (*vars)->next_pipe);
-	printf("COMMANDDDDDD !_!_!_!_!_!_! :%s\n", (*vars)->command);
-	while ((*vars)->split_args[j] != NULL)
-	{
-		printf("split[%d] :%s\n", j, (*vars)->split_args[j]);
-		j++;
-	}
-	if ((*vars)->temp != NULL && ((*vars)->next_pipe == 1 || (*vars)->type == 2))
+//	printf("next_pipe !!!!!! !!!!! !!!! !!! %d\n", (*vars)->next_pipe);
+//	printf("COMMANDDDDDD !_!_!_!_!_!_! :%s\n", (*vars)->command);
+//	while ((*vars)->split_args[j] != NULL)
+//	{
+//		printf("split[%d] :%s\n", j, (*vars)->split_args[j]);
+//		j++;
+//	}
+	if (((*vars)->next_pipe == 1 || (*vars)->type == 2))
 	{
 //		if ((*vars)->next_pipe == 1 && (*vars)->type == 2)
 //		{
@@ -85,13 +85,11 @@ void		execute(t_main **vars, t_paths **var)
 //		close(1);
 //		printf("PIPE #: %d\n", (*vars)->pipe_fd[0]);
 		printf("!!@!@!@!SUPERHERO!@!@!@!@!\n");
-		dup2(((*vars)->pipe_fd)[1], 1);
-		close(((*vars)->pipe_fd)[0]);
+//		dup2(((*vars)->pipe_fd)[0], 0);
+		//close(((*vars)->pipe_fd)[1]);
+//		dup2(((*vars)->pipe_fd2)[1], 1);
+//		close(((*vars)->pipe_fd2)[0]);
 //		printf("TEST3333\n");
-	}
-	else if ((*vars)->temp != NULL && (*vars)->previous_pipe == 1 && (*vars)->next_pipe == 0)
-	{
-		printf("**$*$*$*SUPERHERO*$*$*$*$*\n");
 		if ((*vars)->previous_pipe == 1)
 		{
 			printf("PIPE #: %d\n", (*vars)->pipe_fd[0]);
@@ -100,8 +98,11 @@ void		execute(t_main **vars, t_paths **var)
 			ft_next(vars);
 			if ((*vars)->temp != NULL)
 			{
-				dup2(((*vars)->pipe_fd)[1], 1);
-				close(((*vars)->pipe_fd)[0]);
+				printf("!= NULLL JUST NOT EQUAL NULL\n");
+				dup2(((*vars)->pipe_fd)[0], 0);
+				close(((*vars)->pipe_fd)[1]);
+				dup2(((*vars)->pipe_fd2)[1], 1);
+				close(((*vars)->pipe_fd2)[0]);
 			}
 			else
 			{
@@ -116,6 +117,44 @@ void		execute(t_main **vars, t_paths **var)
 			printf("PIPE #: %d\n", (*vars)->pipe_fd[1]);
 			dup2(((*vars)->pipe_fd)[0], 0);
 			close(((*vars)->pipe_fd)[1]);
+			dup2(((*vars)->pipe_fd2)[1], 1);
+			close(((*vars)->pipe_fd2)[0]);
+		}
+		(*vars)->previous_pipe = 0;
+		ft_next(vars);
+	}
+	else// if ((*vars)->previous_pipe == 1 && (*vars)->next_pipe == 0)
+	{
+		printf("**$*$*$*SUPERHERO*$*$*$*$*\n");
+		if ((*vars)->previous_pipe == 1)
+		{
+			printf("PIPE #: %d\n", (*vars)->pipe_fd[0]);
+			printf("SUPERHERO!!!!!\n");
+			temp = (*vars)->temp;
+			ft_next(vars);
+			if ((*vars)->temp != NULL)
+			{
+				printf("!= NULLL JUST NOT EQUAL NULL\n");
+				dup2(((*vars)->pipe_fd)[0], 0);
+				close(((*vars)->pipe_fd)[1]);
+				dup2(((*vars)->pipe_fd2)[1], 1);
+				close(((*vars)->pipe_fd2)[0]);
+			}
+			else
+			{
+				printf("BEING SENTTTTTTT TTTTTTTOOOOO NEEEEEEEEEEXXXXT\n");
+				dup2(((*vars)->pipe_fd)[0], 0);
+				close(((*vars)->pipe_fd)[1]);
+			}
+			(*vars)->temp = temp;
+		}
+		else
+		{
+			printf("PIPE #: %d\n", (*vars)->pipe_fd[1]);
+			dup2(((*vars)->pipe_fd)[0], 0);
+			close(((*vars)->pipe_fd)[1]);
+			dup2(((*vars)->pipe_fd2)[1], 1);
+			close(((*vars)->pipe_fd2)[0]);
 		}
 		(*vars)->previous_pipe = 0;
 		ft_next(vars);

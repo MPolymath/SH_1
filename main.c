@@ -6,7 +6,7 @@
 /*   By: mdiouf <mdiouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/10/06 17:17:43 by mdiouf            #+#    #+#             */
-/*   Updated: 2014/12/27 09:53:12 by mdiouf           ###   ########.fr       */
+/*   Updated: 2014/12/27 18:51:07 by mdiouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ void		ft_next(t_main **vars)
 {
 	t_tree	*temp2;
 
-	printf("ft_next\n");
-	printf("Vars root child %d\n", (*vars)->var.root->child);
-	if ((*vars)->temp != NULL)
-		printf("COMMMMMMMANDS HOMEYYEYEYE: %s\n", (*vars)->temp->cmd);
+//	printf("ft_next\n");
+//	printf("Vars root child %d\n", (*vars)->var.root->child);
+//	if ((*vars)->temp != NULL)
+//		printf("COMMMMMMMANDS HOMEYYEYEYE: %s\n", (*vars)->temp->cmd);
 	temp2 = NULL;
 	if ((*vars)->var.root->child == 1)
 	{
@@ -102,10 +102,10 @@ void		ft_next(t_main **vars)
 		}
 		else if (((*vars)->temp == (*vars)->var.root->left->right_two) && temp2 != NULL && (ft_strcmp(temp2->cmd, "|") == 0 || ft_strcmp(temp2->cmd, ";") == 0))
 		{
-			printf("AT 3rd JOINT\n");
+//			printf("AT 3rd JOINT\n");
 			if (ft_strcmp(temp2->cmd, "|") == 0)
 			{
-				printf("VARS NEXT PIPE\n");
+//				printf("VARS NEXT PIPE\n");
 				(*vars)->previous_pipe = 1;
 				if (temp2->right_two != NULL && temp2->right_next != NULL && (ft_strcmp(temp2->right_next->cmd, "|") == 0))
 					(*vars)->next_pipe = 1;
@@ -126,6 +126,8 @@ void		ft_next(t_main **vars)
 		if (ft_strcmp(temp2->cmd, "|") != 0 && ft_strcmp(temp2->cmd, ";") != 0)
 		{
 			(*vars)->temp = temp2;
+			(*vars)->previous_pipe = 1;
+			printf("IN HERE IN HERE IN HERE\n\n\n\n");
 			return ;
 		}
 		while (temp2 != NULL)
@@ -133,9 +135,11 @@ void		ft_next(t_main **vars)
 			if ((*vars)->temp == temp2)
 			{
 //				(*vars)->temp = temp2->left;
-				(*vars)->previous_pipe = 0;
+				(*vars)->previous_pipe = 1;
 				(*vars)->next_pipe = 0;
 				(*vars)->temp = temp2->right_two;
+				printf("IN HERE IN HERE IN HERE2\n%s\n\n\n", (*vars)->temp->cmd);
+//				printf("AJLKFSKDJLFJSDKJFLDSJFKSJLFDFKSDJLKLJKJLJKJL\n\n%s\n\n", (*vars)->temp->cmd);
 				return ;
 			}
 			else if ((*vars)->temp == temp2->right_two)
@@ -161,6 +165,8 @@ void		ft_next(t_main **vars)
 //				if (temp2->right_next != NULL && ft_strcmp(temp2->right_next->cmd, "|") == 0)
 //					(*vars)->next_pipe = 1;
 				(*vars)->temp = temp2->right_next;
+///				printf("AJLKFSKDJLFJSDKJFLDSJFKSJLFDFKSDJLKLJKJLJKJL\n\n%s\n\n", (*vars)->temp->cmd);
+				printf("IN HERE IN HERE IN HERE3\n %s\n\n\n", (*vars)->temp->cmd);
 				return ;
 			}
 			else
@@ -173,7 +179,7 @@ void		ft_next(t_main **vars)
 			if (temp2 == NULL)
 				printf("NULL\n");
 			else
-			printf("NOT\n");
+				printf("NOT\n");
 		}
 		if (temp2 == NULL)
 		{
